@@ -30,7 +30,6 @@ import {
 } from 'lucide-react'
 
 const navLinks = [
-  ['Home', 'home'],
   ['Product', 'product'],
   ['Channels', 'channels'],
   ['Mobile App', 'mobile'],
@@ -47,12 +46,12 @@ const capabilities = [
 ]
 
 const processSteps = [
-  ['01', 'Connect', 'Bring Facebook, Instagram, WhatsApp Business, and your website into one intelligent layer.'],
-  ['02', 'Engage', 'Respond instantly and manage every incoming conversation at scale.'],
-  ['03', 'Understand', 'Detect customer need, intent, urgency, requirements, and timeline.'],
-  ['04', 'Qualify', 'Ask smart, business-specific questions to uncover genuine opportunities.'],
-  ['05', 'Prioritize', 'Score each inquiry as Hot, Warm, Cold, or No Lead.'],
-  ['06', 'Handover', 'Give sales the right lead, with the right context, at the right time.'],
+  { number: '01', title: 'Connect', status: 'Channels unified', icon: Layers3, text: 'Bring Facebook, Instagram, WhatsApp Business, and your website into one intelligent layer.' },
+  { number: '02', title: 'Engage', status: 'Instant response', icon: Zap, text: 'Respond instantly and manage every incoming conversation at scale.' },
+  { number: '03', title: 'Understand', status: 'Intent detected', icon: BrainCircuit, text: 'Detect customer need, intent, urgency, requirements, and timeline.' },
+  { number: '04', title: 'Qualify', status: 'Signals verified', icon: ScanSearch, text: 'Ask smart, business-specific questions to uncover genuine opportunities.' },
+  { number: '05', title: 'Prioritize', status: 'Lead scored', icon: Target, text: 'Score each inquiry as Hot, Warm, Cold, or No Lead.' },
+  { number: '06', title: 'Handover', status: 'Sales ready', icon: UserCheck, text: 'Give sales the right lead, with the right context, at the right time.' },
 ]
 
 const benefits = [
@@ -107,6 +106,12 @@ function SectionHeader({ eyebrow, title, copy, centered = false }: { eyebrow: st
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const loaderTimer = window.setTimeout(() => setIsLoading(false), 1650)
+    return () => window.clearTimeout(loaderTimer)
+  }, [])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 32)
@@ -116,19 +121,35 @@ function App() {
   }, [])
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    document.body.style.overflow = menuOpen || isLoading ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
-  }, [menuOpen])
+  }, [menuOpen, isLoading])
 
   return (
     <div className="site-shell">
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div className="site-loader" role="status" aria-live="polite" aria-label="Loading LeadHive AI" initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .42, ease: [0.22, 1, 0.36, 1] }}>
+            <div className="loader-grid" />
+            <div className="loader-glow" />
+            <motion.div className="loader-content" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .55, delay: .08 }}>
+              <motion.img src="/LeadHive%20AI%20Logo.png" alt="LeadHive AI" initial={{ opacity: 0, scale: .94 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: .65, delay: .12 }} />
+              <div className="loader-status"><span><BrainCircuit /></span><div><small>AI SALES INTELLIGENCE</small><b>Preparing your experience<i /><i /><i /></b></div></div>
+              <div className="loader-progress"><span /></div>
+              <div className="loader-steps"><span>Connect</span><i /><span>Understand</span><i /><span>Qualify</span></div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className={`site-content ${isLoading ? 'is-preloading' : 'is-ready'}`} aria-hidden={isLoading}>
       <div className="ambient ambient-one" />
       <div className="ambient ambient-two" />
 
       <header className={`navbar-wrap ${scrolled ? 'is-scrolled' : ''}`}>
         <nav className="navbar container" aria-label="Main navigation">
           <a href="#home" className="brand" aria-label="LeadHive AI home">
-            <img src="/leadhive-logo.png" alt="LeadHive AI" />
+            <img src="/LeadHive%20AI%20Logo.png" alt="LeadHive AI" />
           </a>
           <div className="desktop-nav">
             {navLinks.map(([label, href]) => <a key={href} href={`#${href}`}>{label}</a>)}
@@ -151,13 +172,17 @@ function App() {
       <main>
         <section className="hero section" id="home">
           <div className="hero-grid container">
-            <motion.div className="hero-copy" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-              <div className="hero-eyebrow"><Sparkles /> AI-Powered Lead Intelligence <span>New</span></div>
-              <h1>Turn every conversation into a <span className="gradient-text">qualified opportunity.</span></h1>
+            <motion.div className="hero-copy" initial={false} animate={isLoading ? { opacity: 0, y: 24 } : { opacity: 1, y: 0 }} transition={{ duration: .72, ease: [0.22, 1, 0.36, 1] }}>
+              <div className="hero-eyebrow"><Sparkles /> AI Sales Intelligence</div>
+              <h1>
+                <motion.span className="hero-title-line" initial={false} animate={isLoading ? { opacity: 0, y: 22, filter: 'blur(6px)' } : { opacity: 1, y: 0, filter: 'blur(0px)' }} transition={{ duration: .62, delay: .04 }}>Turn every</motion.span>
+                <motion.span className="hero-title-line" initial={false} animate={isLoading ? { opacity: 0, y: 22, filter: 'blur(6px)' } : { opacity: 1, y: 0, filter: 'blur(0px)' }} transition={{ duration: .62, delay: .12 }}>conversation into a</motion.span>
+                <motion.span className="hero-title-line gradient-text" initial={false} animate={isLoading ? { opacity: 0, y: 22, filter: 'blur(6px)' } : { opacity: 1, y: 0, filter: 'blur(0px)' }} transition={{ duration: .62, delay: .2 }}>qualified opportunity.</motion.span>
+              </h1>
               <p className="hero-lead">LeadHive AI engages every inquiry, understands buying intent, and surfaces the opportunities your sales team should act on first.</p>
               <div className="hero-actions">
                 <a href="#contact" className="button">Book a demo <ArrowRight /></a>
-                <a href="#product" className="button button-ghost">Explore the platform <ArrowDownRight /></a>
+                <a href="#workflow" className="button button-ghost">See how it works <ArrowDownRight /></a>
               </div>
               <div className="hero-proof">
                 <div><strong>10,000</strong><span>Messages</span></div>
@@ -168,27 +193,37 @@ function App() {
               </div>
             </motion.div>
 
-            <motion.div className="hero-visual" initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.2 }}>
-              <div className="visual-rings"><span /><span /><span /></div>
-              <div className="orbit orbit-one"><div className="channel-node fb">f</div></div>
-              <div className="orbit orbit-two"><div className="channel-node ig"><Camera /></div></div>
-              <div className="orbit orbit-three"><div className="channel-node wa"><MessageCircle /></div></div>
-              <div className="orbit orbit-four"><div className="channel-node web"><Globe2 /></div></div>
-              <div className="intelligence-core">
-                <div className="core-glow" />
-                <div className="core-hex"><BrainCircuit /></div>
-                <span>LEADHIVE INTELLIGENCE</span>
+            <motion.div className="hero-visual" initial={false} animate={isLoading ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }} whileHover={{ y: -5, rotateX: 1.2, rotateY: -1.2, transition: { duration: .35, delay: 0 } }} transition={{ duration: .78, delay: .12, ease: [0.22, 1, 0.36, 1] }}>
+              <div className="demo-orbits" aria-hidden="true">
+                <span className="demo-orbit orbit-alpha"><i /><i /></span>
+                <span className="demo-orbit orbit-beta"><i /><i /></span>
+                <span className="demo-orbit orbit-gamma"><i /></span>
               </div>
-              <motion.div className="floating-card lead-card" animate={{ y: [-4, 5, -4] }} transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}>
-                <div className="lead-card-top"><span className="avatar">AK</span><div><b>Ahmed Khan</b><small>WhatsApp • Just now</small></div><span className="hot-pill">HOT</span></div>
-                <p>“We need a solution for 12 locations this month.”</p>
-                <div className="score-row"><span>Intent score</span><strong>94%</strong></div>
-                <div className="score-bar"><i /></div>
-              </motion.div>
-              <motion.div className="floating-card insight-card" animate={{ y: [4, -5, 4] }} transition={{ duration: 5.6, repeat: Infinity, ease: 'easeInOut' }}>
-                <span className="insight-icon"><Sparkles /></span><div><small>AI INSIGHT</small><b>Ready for sales handover</b></div><Check />
-              </motion.div>
-              <div className="data-pulse pulse-one" /><div className="data-pulse pulse-two" />
+              <div className="product-demo">
+                <div className="demo-toolbar"><div><i /><i /><i /></div><span><Radio /> LIVE QUALIFICATION</span><small>LeadHive AI</small></div>
+                <div className="demo-body">
+                  <div className="message-feed">
+                    <div className="demo-label">Incoming conversations <span>4 live</span></div>
+                    <div className="incoming-message message-facebook"><b>f</b><div><small>Facebook</small><p>Is this available for 3 offices?</p></div></div>
+                    <div className="incoming-message message-instagram"><Camera /><div><small>Instagram</small><p>Can your team share pricing?</p></div></div>
+                    <div className="incoming-message message-whatsapp"><MessageCircle /><div><small>WhatsApp</small><p>We need rollout in 2 weeks.</p></div></div>
+                    <div className="typing-message"><Globe2 /><span><i /><i /><i /></span><small>Website visitor typing</small></div>
+                  </div>
+
+                  <div className="ai-route" aria-hidden="true"><span /><i><ArrowRight /></i></div>
+
+                  <div className="qualification-output">
+                    <div className="ai-engine"><span><BrainCircuit /></span><div><b>LeadHive AI</b><small>Understanding conversation</small></div><em><i /> Processing</em></div>
+                    <div className="qualification-tags"><span><Check /> Intent detected</span><span><Check /> Budget confirmed</span><span><Check /> Timeline identified</span></div>
+                    <div className="qualified-lead">
+                      <div className="qualified-head"><span className="lead-avatar">SA</span><div><b>Sarah Ahmed</b><small>Enterprise Inquiry</small></div><span className="lead-state"><em className="warm-state">WARM</em><em className="hot-state">HOT LEAD</em></span></div>
+                      <div className="lead-details"><div><span>Intent</span><b>High</b></div><div><span>Budget</span><b>Confirmed</b></div><div><span>Timeline</span><b>2 Weeks</b></div></div>
+                      <div className="lead-score"><div><span>Lead score</span><strong>92%</strong></div><i><span /></i></div>
+                    </div>
+                    <div className="sales-notification"><Bell /><div><small>SALES HANDOVER</small><b>High-value opportunity sent to your team</b></div><Check /></div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </div>
           <div className="channel-strip container">
@@ -203,15 +238,15 @@ function App() {
             <Reveal className="inbox-panel">
               <div className="panel-top"><div><span className="status-dot" /> Unified inbox</div><span>1,284 unread</span></div>
               {[['Can you share the price?', '2m', 'warm'], ['Need this for 12 branches ASAP', '4m', 'hot'], ['Hello???', '6m', 'cold'], ['Do you deliver to Lahore?', '8m', 'warm'], ['Looking for a job', '12m', 'none']].map(([text, time, status], i) => (
-                <div className={`message-row ${status === 'hot' ? 'highlight' : ''}`} key={text} style={{ opacity: 1 - i * 0.12 }}>
+                <motion.div className={`message-row ${status === 'hot' ? 'highlight' : ''}`} key={text} initial={{ opacity: 0, x: 18 }} whileInView={{ opacity: 1 - i * .12, x: 0 }} viewport={{ once: true }} transition={{ duration: .55, delay: .15 + i * .09 }}>
                   <span className={`mini-avatar a${i}`}>{['S', 'A', 'M', 'H', 'R'][i]}</span>
                   <div><b>{text}</b><small>Incoming conversation</small></div>
                   <time>{time}</time>
                   <span className={`intent-dot ${status}`} />
-                </div>
+                </motion.div>
               ))}
               <div className="inbox-fade" />
-              <div className="signal-callout"><Target /><div><small>HIGH-INTENT SIGNAL DETECTED</small><b>Commercial opportunity surfaced</b></div><ArrowRight /></div>
+              <motion.div className="signal-callout" initial={{ opacity: 0, y: 14, scale: .97 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={{ once: true }} transition={{ duration: .65, delay: .7 }}><Target /><div><small>HIGH-INTENT SIGNAL DETECTED</small><b>Commercial opportunity surfaced</b></div><ArrowRight /></motion.div>
             </Reveal>
           </div>
           <Reveal className="statement container">
@@ -242,16 +277,30 @@ function App() {
           </div>
         </section>
 
-        <section className="process-section section">
+        <section className="process-section section" id="workflow">
           <div className="container">
             <SectionHeader eyebrow="How it works" title={<>From message to qualified opportunity. <span className="gradient-text">Automatically.</span></>} copy="A continuous intelligence layer that turns raw conversations into confident human action." />
-            <div className="process-track">
-              {processSteps.map(([number, title, text], i) => (
-                <Reveal className="process-step" delay={i * 0.06} key={number}>
-                  <div className="step-marker"><span>{number}</span>{i < processSteps.length - 1 && <i />}</div>
-                  <h3>{title}</h3><p>{text}</p>
-                </Reveal>
-              ))}
+            <div className="process-shell">
+              <div className="process-beam" aria-hidden="true"><span /></div>
+              <div className="process-track">
+                {processSteps.map((step, i) => (
+                  <Reveal className="process-step" delay={i * 0.08} key={step.number}>
+                    <motion.div
+                      className="step-marker"
+                      whileInView={{ scale: [0.84, 1.08, 1] }}
+                      viewport={{ once: true }}
+                      transition={{ duration: .55, delay: .16 + i * .12 }}
+                    >
+                      <step.icon />
+                      <span>{step.number}</span>
+                    </motion.div>
+                    <div className="step-status"><i />{step.status}</div>
+                    <h3>{step.title}</h3>
+                    <p>{step.text}</p>
+                    <span className="step-corner" />
+                  </Reveal>
+                ))}
+              </div>
             </div>
             <Reveal className="lead-legend">
               <span>Lead classification</span>
@@ -376,7 +425,7 @@ function App() {
               <div className="eyebrow"><span />Ready when you are</div>
               <h2>Your next best customer is <span className="gradient-text">already messaging you.</span></h2>
               <p>The question is whether your team will find them in time. Let LeadHive engage every inquiry and surface the leads that deserve attention.</p>
-              <div className="hero-actions centered-actions"><a href="mailto:hello@leadhive.ai?subject=Book%20a%20LeadHive%20Demo" className="button">Book a demo <ArrowRight /></a><a href="mailto:hello@leadhive.ai?subject=Get%20Started%20with%20LeadHive" className="button button-ghost">Get started</a></div>
+              <div className="hero-actions centered-actions"><a href="mailto:hello@m3hive.com?subject=Book%20a%20LeadHive%20Demo" className="button">Book a demo <ArrowRight /></a><a href="mailto:hello@m3hive.com?subject=Get%20Started%20with%20LeadHive" className="button button-ghost">Get started</a></div>
               <div className="cta-proof"><span><Check /> More conversations</span><span><Check /> Faster response</span><span><Check /> Better qualified leads</span><span><Check /> Same sales team</span></div>
             </Reveal>
           </div>
@@ -385,13 +434,14 @@ function App() {
 
       <footer>
         <div className="container footer-grid">
-          <div className="footer-brand"><img src="/leadhive-logo.png" alt="LeadHive AI" /><p>Turning every customer conversation into clear, qualified sales opportunity.</p></div>
+          <div className="footer-brand"><img src="/LeadHive%20AI%20Logo.png" alt="LeadHive AI" /><p>Turning every customer conversation into clear, qualified sales opportunity.</p></div>
           <div><h4>Platform</h4><a href="#product">Product</a><a href="#channels">Channels</a><a href="#mobile">Mobile app</a></div>
           <div><h4>Company</h4><a href="#why">Why LeadHive</a><a href="#contact">Contact</a><a href="#contact">Book a demo</a></div>
-          <div className="footer-contact"><h4>Start a conversation</h4><a href="mailto:hello@leadhive.ai">hello@leadhive.ai <ArrowUpRightIcon /></a><small>Built for ambitious sales teams.</small></div>
+          <div className="footer-contact"><h4>Start a conversation</h4><a href="mailto:hello@m3hive.com">hello@m3hive.com <ArrowUpRightIcon /></a><small>Built for ambitious sales teams.</small><a className="powered-button" href="https://m3hive.com" target="_blank" rel="noreferrer"><span>Powered by</span><strong>m3hive</strong><ArrowUpRightIcon /></a></div>
         </div>
         <div className="container footer-bottom"><span>© 2026 LeadHive AI. All rights reserved.</span><div><a href="#">Privacy</a><a href="#">Terms</a></div></div>
       </footer>
+      </div>
     </div>
   )
 }
