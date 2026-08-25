@@ -1,0 +1,22 @@
+:root {
+  --navy-950: #06111f;
+  --navy-900: #091829;
+  --navy-800: #10253a;
+  --ink: #101b27;
+  --ink-soft: #465463;
+  --muted: #6f7b87;
+  --line: #dce1e5;
+  --line-dark: rgba(255, 255, 255, .13);
+  --paper: #f5f1e9;
+  --neutral: #eef1f2;
+  --white: #fff;
+  --blue: #1676e8;
+  --cyan: #18bddd;
+  --green: #168c63;
+  --amber: #d08a32;
+  --red: #c94a4a;
+  --font-display: 'Manrope', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --container: 1320px;
+  --shadow-product: 0 34px 90px rgba(0, 0, 0, .3);
+}
