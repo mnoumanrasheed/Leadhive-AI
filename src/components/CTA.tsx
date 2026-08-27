@@ -1,26 +1,53 @@
-import { ArrowRight, Check } from 'lucide-react'
+import type { FormEvent } from 'react'
+import { ArrowRight, Check, Mail } from 'lucide-react'
 import { Reveal } from './Reveal'
 
 export function CTA() {
+  const prepareDemoEmail = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const form = new FormData(event.currentTarget)
+    const subject = `LeadHive demo request — ${form.get('company') || 'New enquiry'}`
+    const body = [
+      `Name: ${form.get('name')}`,
+      `Work email: ${form.get('email')}`,
+      `Company: ${form.get('company')}`,
+      `Primary channels: ${form.get('channels')}`,
+      `Monthly conversation volume: ${form.get('volume')}`,
+    ].join('\n')
+    window.location.href = `mailto:hello@m3hive.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+  }
+
   return (
     <section className="cta-section section-pad" id="contact">
       <div className="container">
-        <Reveal className="cta-layout">
-          <div>
+        <div className="cta-layout">
+          <Reveal className="cta-heading">
             <p className="eyebrow light">Ready when you are</p>
             <h2>Your next best customer is already messaging you.</h2>
-          </div>
-          <div className="cta-copy">
-            <p>The question is whether your team will find them in time. Let LeadHive engage every inquiry and surface the leads that deserve attention.</p>
-            <div className="cta-actions">
-              <a href="mailto:hello@m3hive.com?subject=Book%20a%20LeadHive%20Demo" className="button">Book a demo <ArrowRight /></a>
-              <a href="mailto:hello@m3hive.com?subject=Get%20Started%20with%20LeadHive" className="text-link light">Get started <ArrowRight /></a>
+            <p>Tell us a little about your conversation volume and channels. We’ll use it to make the demo relevant to your team.</p>
+            <div className="cta-proof">
+              {['Channel-aware qualification', 'Clear Opportunity Scores', 'Human-ready Sales Handover'].map((item) => <span key={item}><Check /> {item}</span>)}
             </div>
-          </div>
-        </Reveal>
-        <div className="cta-proof">
-          {['More conversations', 'Faster response', 'Better qualified leads', 'Same sales team'].map((item) => <span key={item}><Check /> {item}</span>)}
+          </Reveal>
+          <Reveal className="demo-form-wrap" delay={0.08}>
+            <form className="demo-form" onSubmit={prepareDemoEmail}>
+              <div className="form-heading"><span>Book a Demo</span><small>All fields are required</small></div>
+              <label><span>Name</span><input name="name" autoComplete="name" required placeholder="Amelia Carter" /></label>
+              <label><span>Work Email</span><input name="email" type="email" autoComplete="email" required placeholder="amelia@company.com" /></label>
+              <label><span>Company</span><input name="company" autoComplete="organization" required placeholder="Northstar Retail" /></label>
+              <div className="form-row">
+                <label><span>Primary Channels</span><select name="channels" required defaultValue=""><option value="" disabled>Select channels</option><option>WhatsApp</option><option>Instagram</option><option>Facebook Messenger</option><option>Website chat</option><option>Multiple channels</option></select></label>
+                <label><span>Monthly Conversation Volume</span><select name="volume" required defaultValue=""><option value="" disabled>Select volume</option><option>Under 1,000</option><option>1,000–5,000</option><option>5,000–20,000</option><option>20,000+</option></select></label>
+              </div>
+              <button className="button" type="submit">Schedule Demo <ArrowRight /></button>
+              <p className="form-note"><Mail /> No backend is connected yet. This prepares the request in your email app.</p>
+            </form>
+          </Reveal>
         </div>
+        <Reveal className="cta-contact-line">
+          <span>Prefer email?</span>
+          <a href="mailto:hello@m3hive.com?subject=LeadHive%20AI%20Demo">hello@m3hive.com <ArrowRight /></a>
+        </Reveal>
       </div>
     </section>
   )

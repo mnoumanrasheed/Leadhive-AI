@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { ArrowRight, Check } from 'lucide-react'
+import { primaryLead, qualificationSignals, salesRepresentative } from '../data/demoData'
 
 const steps = [
   {
@@ -11,7 +12,7 @@ const steps = [
   },
   {
     number: '02',
-    label: 'LeadHive understands',
+    label: 'AI Understanding',
     title: 'Unstructured language becomes structured sales context.',
     copy: 'Intent, quantity, location, and timeline are extracted as the conversation develops.',
   },
@@ -23,13 +24,13 @@ const steps = [
   },
   {
     number: '04',
-    label: 'Lead score',
+    label: 'Opportunity Score',
     title: 'Buying signals become a clear priority.',
     copy: 'Every conversation is scored as Hot, Warm, Cold, or No Lead—so the best opportunities rise first.',
   },
   {
     number: '05',
-    label: 'Sales handover',
+    label: 'Sales Handover',
     title: 'The right person gets the full picture.',
     copy: 'A rich summary, qualification data, and recommended next step are sent to sales at the right moment.',
   },
@@ -57,15 +58,15 @@ function WorkflowVisual({ active }: { active: number }) {
           >
             {active === 0 && (
               <div className="state-message">
-                <div className="state-meta"><span className="avatar blue">HA</span><div><strong>Hassan Ali</strong><small>Instagram · now</small></div></div>
-                <blockquote>“Need 20 units for our Lahore branches next month.”</blockquote>
-                <div className="received"><Check /> Message received and response started in 2.4s</div>
+                <div className="state-meta"><span className="avatar blue">{primaryLead.initials}</span><div><strong>{primaryLead.name}</strong><small>{primaryLead.company} · now</small></div></div>
+                <blockquote>“{primaryLead.message}”</blockquote>
+                <div className="received"><Check /> Message received · response in progress</div>
               </div>
             )}
             {active === 1 && (
               <div className="state-understanding">
-                <p className="state-kicker">Signals extracted</p>
-                {[['Purchase intent', 'High'], ['Quantity', '20 units'], ['Location', 'Lahore'], ['Timeline', 'Next month']].map(([key, value], index) => (
+                <p className="state-kicker">Qualification Signals extracted</p>
+                {qualificationSignals.map(([key, value], index) => (
                   <div key={key}><span>0{index + 1}</span><label>{key}</label><strong>{value}</strong><Check /></div>
                 ))}
               </div>
@@ -73,25 +74,25 @@ function WorkflowVisual({ active }: { active: number }) {
             {active === 2 && (
               <div className="state-qualification">
                 <p className="state-kicker">Qualification in progress</p>
-                <div className="rule-check"><span>Business rule</span><strong>Delivery scope required</strong></div>
-                <div className="qual-chat"><span className="mark small">L</span><p>How many branches will need delivery?</p></div>
-                <div className="qual-chat customer"><p>All four locations in Lahore.</p><span className="avatar blue">HA</span></div>
+                <div className="rule-check"><span>Business Need</span><strong>Enterprise rollout scope</strong></div>
+                <div className="qual-chat"><span className="mark small">L</span><p>Will all 20 UK locations need to launch next month?</p></div>
+                <div className="qual-chat customer"><p>Yes, the rollout covers all 20 sites.</p><span className="avatar blue">{primaryLead.initials}</span></div>
                 <div className="received"><Check /> Required context confirmed</div>
               </div>
             )}
             {active === 3 && (
               <div className="state-score">
-                <div className="large-score"><strong>92</strong><span>/ 100</span></div>
-                <span className="hot-label">Hot opportunity</span>
-                <p>High intent · Volume order · Clear location · Near-term timeline</p>
+                <div className="large-score"><strong>{primaryLead.score}</strong><span>/ 100</span></div>
+                <span className="hot-label">Hot Opportunity</span>
+                <p>High Purchase Intent · 20 locations · UK · Next-month Timeline</p>
                 <div className="score-line"><span /></div>
               </div>
             )}
             {active === 4 && (
               <div className="state-handover">
-                <p className="state-kicker">Sales handover</p>
-                <div className="handover-person"><span className="avatar navy">AK</span><div><strong>Ahmed Khan</strong><small>Enterprise sales · available</small></div><span>Assigned</span></div>
-                <div className="handover-summary"><span>LeadHive summary</span><p>High-intent buyer needs 20 units across four Lahore branches next month. Pricing requested. Recommended: contact today.</p></div>
+                <p className="state-kicker">Sales Handover</p>
+                <div className="handover-person"><span className="avatar navy">{salesRepresentative.initials}</span><div><strong>{salesRepresentative.name}</strong><small>{salesRepresentative.role} · available</small></div><span>Assigned</span></div>
+                <div className="handover-summary"><span>Lead Intelligence summary</span><p>{primaryLead.name} at {primaryLead.company} is planning a 20-site UK rollout next month and requested enterprise pricing. Recommended Action: contact today.</p></div>
                 <button>Open opportunity <ArrowRight /></button>
               </div>
             )}
@@ -133,6 +134,15 @@ export function WorkflowSection() {
               data-workflow-step={index}
               key={step.number}
               onClick={() => setActive(index)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault()
+                  setActive(index)
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-pressed={active === index}
             >
               <span>{step.number}</span>
               <div><small>{step.label}</small><h3>{step.title}</h3><p>{step.copy}</p></div>

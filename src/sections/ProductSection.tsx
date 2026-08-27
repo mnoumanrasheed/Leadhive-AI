@@ -1,5 +1,6 @@
 import { ArrowRight, Check } from 'lucide-react'
 import { Reveal } from '../components/Reveal'
+import { primaryLead, qualificationSignals } from '../data/demoData'
 
 const capabilities = [
   ['Respond in seconds', 'Keep intent high with fast, always-on responses across every connected channel.'],
@@ -24,18 +25,16 @@ export function ProductSection() {
         <div className="capability-composition">
           <Reveal className="qualification-sheet">
             <div className="sheet-head">
-              <div><span className="avatar blue">HA</span><div><strong>Hassan Ali</strong><small>New enterprise inquiry</small></div></div>
-              <span className="hot-label">Hot opportunity</span>
+              <div><span className="avatar blue">{primaryLead.initials}</span><div><strong>{primaryLead.name}</strong><small>{primaryLead.role} · {primaryLead.company}</small></div></div>
+              <span className="hot-label">Hot Opportunity</span>
             </div>
-            <p className="source-message">“Need 20 units for our Lahore branches next month.”</p>
+            <p className="source-message">“{primaryLead.message}”</p>
             <div className="sheet-fields">
-              <label><span>Purchase intent</span><strong><Check /> High</strong></label>
-              <label><span>Quantity</span><strong>20 units</strong></label>
-              <label><span>Location</span><strong>Lahore</strong></label>
-              <label><span>Timeline</span><strong>Next month</strong></label>
-              <label className="wide"><span>Recommended action</span><strong>Share business pricing and schedule sales call</strong></label>
+              {qualificationSignals.map(([label, value], index) => <label key={label}><span>{label}</span><strong>{index === 0 && <Check />}{value}</strong></label>)}
+              <label className="wide"><span>Business Need</span><strong>Enterprise rollout across 20 retail locations</strong></label>
+              <label className="wide"><span>Recommended Action</span><strong>Share enterprise pricing and schedule a discovery call</strong></label>
             </div>
-            <div className="sheet-action"><span>Qualified automatically in 38 seconds</span><button>Send to sales <ArrowRight /></button></div>
+            <div className="sheet-action"><span>Opportunity Score <strong>{primaryLead.score}/100</strong></span><button>Start Sales Handover <ArrowRight /></button></div>
           </Reveal>
 
           <div className="capability-list">

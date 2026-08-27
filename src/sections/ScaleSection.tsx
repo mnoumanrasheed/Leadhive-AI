@@ -1,4 +1,4 @@
-import { TrendingUp } from 'lucide-react'
+import { CheckCircle2 } from 'lucide-react'
 import { Reveal } from '../components/Reveal'
 
 const funnel = [
@@ -6,7 +6,7 @@ const funnel = [
   ['6,850', 'Meaningful conversations', '82%'],
   ['1,240', 'Potential prospects', '61%'],
   ['420', 'Qualified opportunities', '44%'],
-  ['150', 'Hot leads', '28%'],
+  ['150', 'Hot Opportunities', '28%'],
 ]
 
 export function ScaleSection() {
@@ -20,7 +20,7 @@ export function ScaleSection() {
           <blockquote>“Your team starts the day with clarity, not backlog.”</blockquote>
         </Reveal>
         <Reveal className="funnel-visual" delay={0.08}>
-          <div className="funnel-head"><span><i /> Live funnel</span><small>Last 30 days</small></div>
+          <div className="funnel-head"><span><i /> Example qualification scenario</span><small>Illustrative campaign</small></div>
           <div className="funnel-body">
             {funnel.map(([value, label, width], index) => (
               <div className={`funnel-row ${index === funnel.length - 1 ? 'final' : ''}`} style={{ width }} key={label}>
@@ -28,7 +28,7 @@ export function ScaleSection() {
               </div>
             ))}
           </div>
-          <div className="funnel-footer"><TrendingUp /><div><strong>3.6× better sales focus</strong><span>Powered by LeadHive qualification</span></div></div>
+          <div className="funnel-footer"><CheckCircle2 /><div><strong>From conversation volume to clear sales priority</strong><span>Illustrative figures—not verified customer results</span></div></div>
         </Reveal>
       </div>
     </section>

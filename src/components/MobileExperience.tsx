@@ -1,9 +1,10 @@
-import { ArrowRight, Bell, Check, MessageSquare, TrendingUp } from 'lucide-react'
+import { ArrowRight, Bell, Check, MessageSquare } from 'lucide-react'
 import { Reveal } from './Reveal'
+import { additionalLeads, primaryLead, salesRepresentative } from '../data/demoData'
 
 const features = [
-  ['Hot lead alerts', 'Act the moment high-intent opportunities emerge.'],
-  ['AI-generated summaries', 'Understand every conversation without reading every message.'],
+  ['Hot Opportunity alerts', 'Act the moment high-intent opportunities emerge.'],
+  ['Lead Intelligence summaries', 'Understand every conversation without reading every message.'],
   ['Channel performance', 'See demand, engagement, and quality across touchpoints.'],
   ['Live team visibility', 'Keep sales aligned with what needs action.'],
 ]
@@ -15,15 +16,15 @@ export function MobileExperience() {
         <Reveal className="phone-stage">
           <div className="phone">
             <div className="phone-top"><span>9:41</span><i /></div>
-            <div className="app-head"><div><small>Good morning,</small><strong>Sales overview</strong></div><span>AK</span></div>
-            <div className="mobile-metric"><small>Hot leads today</small><div><strong>24</strong><span><TrendingUp /> 18%</span></div></div>
-            <div className="mobile-subhead"><strong>Needs your attention</strong><span>View all</span></div>
-            <div className="mobile-lead selected"><span className="avatar navy">HA</span><div><strong>Hassan Ali</strong><small>20 units · Lahore</small></div><em>HOT</em></div>
-            <div className="mobile-lead"><span className="avatar amber">SM</span><div><strong>Sara Malik</strong><small>Demo requested · Instagram</small></div><em>92</em></div>
-            <div className="mobile-summary"><span>LeadHive summary</span><p>High purchase intent. Budget confirmed. Wants to begin this month.</p><small><Check /> Ready for follow-up</small></div>
+            <div className="app-head"><div><small>Good morning, {salesRepresentative.name.split(' ')[0]}</small><strong>Lead Intelligence</strong></div><span>{salesRepresentative.initials}</span></div>
+            <div className="mobile-metric"><small>Opportunity Score</small><div><strong>{primaryLead.score}</strong><span>Hot Opportunity</span></div></div>
+            <div className="mobile-subhead"><strong>Needs your attention</strong><span>Conversations</span></div>
+            <div className="mobile-lead selected"><span className="avatar navy">{primaryLead.initials}</span><div><strong>{primaryLead.name}</strong><small>{primaryLead.deployment} · {primaryLead.region}</small></div><em>HOT</em></div>
+            <div className="mobile-lead"><span className="avatar amber">{additionalLeads[0].initials}</span><div><strong>{additionalLeads[0].name}</strong><small>{additionalLeads[0].note}</small></div><em>{additionalLeads[0].score}</em></div>
+            <div className="mobile-summary"><span>Recommended Action</span><p>Share enterprise pricing and schedule a discovery call for the 20-site rollout.</p><small><Check /> Ready for Sales Handover</small></div>
             <div className="app-tabs"><MessageSquare /><span><i /></span><Bell /></div>
           </div>
-          <div className="phone-notification"><span><Bell /></span><div><small>New hot lead</small><strong>Action recommended now</strong></div><b>94</b></div>
+          <div className="phone-notification"><span><Bell /></span><div><small>Hot Opportunity</small><strong>{primaryLead.name}</strong></div><b>{primaryLead.score}</b></div>
         </Reveal>
 
         <div className="mobile-copy">

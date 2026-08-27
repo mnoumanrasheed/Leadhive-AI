@@ -34,8 +34,8 @@ export function WhyLeadHive() {
       </Reveal>
       <Reveal className="container intersection-copy">
         <span>Built at the intersection of</span>
-        <strong>AI technology<br />and marketing intelligence.</strong>
-        <p>Technology understands conversations. Marketing understands customers. LeadHive brings both together to produce better-qualified opportunities—not just more replies.</p>
+        <strong>AI engineering<br />and customer experience.</strong>
+        <p>LeadHive combines conversation understanding with sales automation to create precise Lead Intelligence and human-ready Sales Handovers—not just more replies.</p>
       </Reveal>
     </section>
   )

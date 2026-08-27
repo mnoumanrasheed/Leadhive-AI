@@ -17,6 +17,9 @@
   --red: #c94a4a;
   --font-display: 'Manrope', sans-serif;
   --font-body: 'DM Sans', sans-serif;
-  --container: 1320px;
-  --shadow-product: 0 34px 90px rgba(0, 0, 0, .3);
+  --container: 1280px;
+  --radius-xs: 5px;
+  --radius-sm: 8px;
+  --radius-lg: 14px;
+  --shadow-product: 0 28px 68px rgba(0, 0, 0, .24);
 }

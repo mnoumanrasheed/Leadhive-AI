@@ -6,6 +6,7 @@ const links = [
   ['Product', 'product'],
   ['How It Works', 'workflow'],
   ['Channels', 'channels'],
+  ['Mobile', 'mobile'],
   ['Why LeadHive', 'why'],
 ] as const
 
@@ -13,6 +14,8 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const reducedMotion = useReducedMotion()
+  const homePath = window.location.pathname === '/'
+  const sectionHref = (id: string) => `${homePath ? '' : '/'}#${id}`
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -26,17 +29,25 @@ export function Navbar() {
     return () => { document.body.style.overflow = '' }
   }, [menuOpen])
 
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenuOpen(false)
+    }
+    window.addEventListener('keydown', closeOnEscape)
+    return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [])
+
   return (
     <header className={`navbar-wrap ${scrolled ? 'is-scrolled' : ''}`}>
       <nav className="navbar container" aria-label="Main navigation">
-        <a href="#home" className="brand" aria-label="LeadHive AI home">
+        <a href={homePath ? '#home' : '/'} className="brand" aria-label="LeadHive AI home">
           <img src="/LeadHive%20AI%20Logo.png" alt="LeadHive AI" />
         </a>
         <div className="desktop-nav">
-          {links.map(([label, id]) => <a key={id} href={`#${id}`}>{label}</a>)}
+          {links.map(([label, id]) => <a key={id} href={sectionHref(id)}>{label}</a>)}
         </div>
-        <a href="#contact" className="button button-small nav-cta">Book a demo <ArrowUpRight /></a>
-        <button className="menu-button" onClick={() => setMenuOpen((open) => !open)} aria-label="Toggle navigation" aria-expanded={menuOpen}>
+        <a href={sectionHref('contact')} className="button button-small nav-cta">Book a demo <ArrowUpRight /></a>
+        <button className="menu-button" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={menuOpen} aria-controls="mobile-navigation">
           {menuOpen ? <X /> : <Menu />}
         </button>
       </nav>
@@ -44,12 +55,13 @@ export function Navbar() {
         {menuOpen && (
           <motion.div
             className="mobile-menu"
+            id="mobile-navigation"
             initial={reducedMotion ? false : { opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={reducedMotion ? undefined : { opacity: 0, y: -8 }}
           >
-            {links.map(([label, id]) => <a key={id} href={`#${id}`} onClick={() => setMenuOpen(false)}>{label}<span>↗</span></a>)}
-            <a className="button" href="#contact" onClick={() => setMenuOpen(false)}>Book a demo <ArrowUpRight /></a>
+            {links.map(([label, id]) => <a key={id} href={sectionHref(id)} onClick={() => setMenuOpen(false)}>{label}<ArrowUpRight /></a>)}
+            <a className="button" href={sectionHref('contact')} onClick={() => setMenuOpen(false)}>Book a demo <ArrowUpRight /></a>
           </motion.div>
         )}
       </AnimatePresence>

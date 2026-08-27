@@ -9,8 +9,16 @@ import { MobileExperience } from './components/MobileExperience'
 import { WhyLeadHive } from './sections/WhyLeadHive'
 import { CTA } from './components/CTA'
 import { Footer } from './components/Footer'
+import { TrustSection } from './sections/TrustSection'
+import { LegalPage } from './pages/LegalPage'
 
 export default function App() {
+  const path = window.location.pathname.replace(/\/$/, '') || '/'
+
+  if (path === '/privacy' || path === '/terms') {
+    return <LegalPage type={path === '/privacy' ? 'privacy' : 'terms'} />
+  }
+
   return (
     <div className="site-shell">
       <Navbar />
@@ -18,6 +26,7 @@ export default function App() {
         <Hero />
         <ProblemSection />
         <ProductSection />
+        <TrustSection />
         <WorkflowSection />
         <ScaleSection />
         <Channels />

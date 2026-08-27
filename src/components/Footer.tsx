@@ -1,15 +1,18 @@
 import { ArrowUpRight } from 'lucide-react'
 
 export function Footer() {
+  const homePath = window.location.pathname === '/'
+  const sectionHref = (id: string) => `${homePath ? '' : '/'}#${id}`
+
   return (
     <footer>
       <div className="container footer-grid">
-        <div className="footer-brand"><img src="/LeadHive%20AI%20Logo.png" alt="LeadHive AI" /><p>Turning every customer conversation into clear, qualified sales opportunity.</p></div>
-        <div><h4>Platform</h4><a href="#product">Product</a><a href="#workflow">How it works</a><a href="#channels">Channels</a><a href="#mobile">Mobile app</a></div>
-        <div><h4>Company</h4><a href="#why">Why LeadHive</a><a href="#contact">Contact</a><a href="#contact">Book a demo</a></div>
-        <div className="footer-contact"><h4>Start a conversation</h4><a href="mailto:hello@m3hive.com">hello@m3hive.com <ArrowUpRight /></a><small>Built for ambitious sales teams.</small><a className="powered-by" href="https://m3hive.com" target="_blank" rel="noreferrer">Powered by <strong>m3hive</strong></a></div>
+        <div className="footer-brand"><a href="/" aria-label="LeadHive AI home"><img src="/LeadHive%20AI%20Logo.png" alt="LeadHive AI" /></a><p>Turning digital Conversations into clear, qualified sales opportunities.</p><small>Built by M3Hive</small></div>
+        <div><h4>Product</h4><a href={sectionHref('product')}>Lead Intelligence</a><a href={sectionHref('workflow')}>How It Works</a><a href={sectionHref('channels')}>Channels</a><a href={sectionHref('mobile')}>Mobile</a></div>
+        <div><h4>Company</h4><a href={sectionHref('why')}>Why LeadHive</a><a href={sectionHref('contact')}>Book a Demo</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></div>
+        <div className="footer-contact"><h4>Contact</h4><a href="mailto:hello@m3hive.com">hello@m3hive.com <ArrowUpRight /></a><small>For product, partnership, and demo enquiries.</small><a className="powered-by" href="https://m3hive.com" target="_blank" rel="noreferrer">Visit <strong>M3Hive</strong> <ArrowUpRight /></a></div>
       </div>
-      <div className="container footer-bottom"><span>© 2026 LeadHive AI. All rights reserved.</span><div><a href="#">Privacy</a><a href="#">Terms</a></div></div>
+      <div className="container footer-bottom"><span>© 2026 LeadHive AI. All rights reserved.</span><span>AI Engineering · Sales Automation · Enterprise Delivery</span></div>
     </footer>
   )
 }
