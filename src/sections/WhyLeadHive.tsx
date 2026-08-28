@@ -1,13 +1,37 @@
-import { ArrowRight, Check } from 'lucide-react'
+import { ArrowRight, Clock, Cpu, Layers, Target, TrendingUp, Zap } from 'lucide-react'
 import { Reveal } from '../components/Reveal'
 
 const benefits = [
-  ['One intelligent frontline', 'Every channel. One consistent, intelligent customer experience.'],
-  ['Always on', 'Qualify demand 24/7—even when your sales team is offline.'],
-  ['Instant response', 'Keep momentum high with responses delivered in seconds.'],
-  ['Built for scale', 'Handle campaign spikes without adding operational headcount.'],
-  ['Smart qualification', 'Surface the signals that reveal commercial opportunity.'],
-  ['Structured intelligence', 'Turn messy conversations into clean, usable sales context.'],
+  {
+    title: 'One intelligent frontline',
+    copy: 'Every channel. One consistent, intelligent customer experience.',
+    icon: Layers,
+  },
+  {
+    title: 'Always on',
+    copy: 'Qualify demand 24/7—even when your sales team is offline.',
+    icon: Clock,
+  },
+  {
+    title: 'Instant response',
+    copy: 'Keep momentum high with responses delivered in seconds.',
+    icon: Zap,
+  },
+  {
+    title: 'Built for scale',
+    copy: 'Handle campaign spikes without adding operational headcount.',
+    icon: TrendingUp,
+  },
+  {
+    title: 'Smart qualification',
+    copy: 'Surface the signals that reveal commercial opportunity.',
+    icon: Target,
+  },
+  {
+    title: 'Structured intelligence',
+    copy: 'Turn messy conversations into clean, usable sales context.',
+    icon: Cpu,
+  },
 ]
 
 export function WhyLeadHive() {
@@ -20,11 +44,21 @@ export function WhyLeadHive() {
           <p>More attention should create more business, not more operational chaos. LeadHive turns unstructured conversations into prioritized opportunities.</p>
         </Reveal>
         <div className="benefit-list">
-          {benefits.map(([title, copy], index) => (
-            <Reveal className="benefit-row" delay={index * 0.035} key={title}>
-              <span>0{index + 1}</span><div><h3>{title}</h3><p>{copy}</p></div><Check />
-            </Reveal>
-          ))}
+          {benefits.map((benefit, index) => {
+            const Icon = benefit.icon
+            return (
+              <Reveal className="benefit-row" delay={index * 0.035} key={benefit.title}>
+                <span>0{index + 1}</span>
+                <div>
+                  <h3>{benefit.title}</h3>
+                  <p>{benefit.copy}</p>
+                </div>
+                <div className="benefit-icon-badge" aria-hidden="true">
+                  <Icon />
+                </div>
+              </Reveal>
+            )
+          })}
         </div>
       </div>
       <Reveal className="container strategy-line">

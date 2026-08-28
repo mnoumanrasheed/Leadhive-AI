@@ -18,7 +18,7 @@ export function Navbar() {
   const sectionHref = (id: string) => `${homePath ? '' : '/'}#${id}`
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
+    const onScroll = () => setScrolled(window.scrollY > 20)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -43,14 +43,29 @@ export function Navbar() {
         <a href={homePath ? '#home' : '/'} className="brand" aria-label="LeadHive AI home">
           <img src="/LeadHive%20AI%20Logo.png" alt="LeadHive AI" />
         </a>
+
         <div className="desktop-nav">
-          {links.map(([label, id]) => <a key={id} href={sectionHref(id)}>{label}</a>)}
+          {links.map(([label, id]) => (
+            <a key={id} href={sectionHref(id)}>{label}</a>
+          ))}
         </div>
-        <a href={sectionHref('contact')} className="button button-small nav-cta">Book a demo <ArrowUpRight /></a>
-        <button className="menu-button" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={menuOpen} aria-controls="mobile-navigation">
-          {menuOpen ? <X /> : <Menu />}
-        </button>
+
+        <div className="nav-actions">
+          <a href={sectionHref('contact')} className="button button-small nav-cta">
+            Book a demo <ArrowUpRight />
+          </a>
+          <button 
+            className="menu-button" 
+            onClick={() => setMenuOpen((open) => !open)} 
+            aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} 
+            aria-expanded={menuOpen} 
+            aria-controls="mobile-navigation"
+          >
+            {menuOpen ? <X /> : <Menu />}
+          </button>
+        </div>
       </nav>
+
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -59,9 +74,17 @@ export function Navbar() {
             initial={reducedMotion ? false : { opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={reducedMotion ? undefined : { opacity: 0, y: -8 }}
+            transition={{ duration: 0.25 }}
           >
-            {links.map(([label, id]) => <a key={id} href={sectionHref(id)} onClick={() => setMenuOpen(false)}>{label}<ArrowUpRight /></a>)}
-            <a className="button" href={sectionHref('contact')} onClick={() => setMenuOpen(false)}>Book a demo <ArrowUpRight /></a>
+            {links.map(([label, id]) => (
+              <a key={id} href={sectionHref(id)} onClick={() => setMenuOpen(false)}>
+                {label}
+                <ArrowUpRight />
+              </a>
+            ))}
+            <a className="button" href={sectionHref('contact')} onClick={() => setMenuOpen(false)}>
+              Book a demo <ArrowUpRight />
+            </a>
           </motion.div>
         )}
       </AnimatePresence>

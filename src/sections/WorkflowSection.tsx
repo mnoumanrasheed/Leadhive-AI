@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { ArrowRight, Check } from 'lucide-react'
+import { ArrowRight, Check, ChevronRight } from 'lucide-react'
 import { primaryLead, qualificationSignals, salesRepresentative } from '../data/demoData'
 
 const steps = [
@@ -127,7 +127,7 @@ export function WorkflowSection() {
         <p>A continuous intelligence layer turns raw messages into confident human action.</p>
       </div>
       <div className="container workflow-layout">
-        <div className="workflow-steps">
+        <div className="workflow-steps" role="tablist" aria-label="Workflow step tabs">
           {steps.map((step, index) => (
             <article
               className={`workflow-step ${active === index ? 'active' : ''}`}
@@ -140,12 +140,20 @@ export function WorkflowSection() {
                   setActive(index)
                 }
               }}
-              role="button"
+              role="tab"
               tabIndex={0}
-              aria-pressed={active === index}
+              aria-selected={active === index}
+              aria-label={`Step ${step.number}: ${step.label}`}
             >
               <span>{step.number}</span>
-              <div><small>{step.label}</small><h3>{step.title}</h3><p>{step.copy}</p></div>
+              <div>
+                <small>{step.label}</small>
+                <h3>{step.title}</h3>
+                <p>{step.copy}</p>
+              </div>
+              <div className="workflow-step-indicator" aria-hidden="true">
+                <ChevronRight size={16} />
+              </div>
             </article>
           ))}
         </div>

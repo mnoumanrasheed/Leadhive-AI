@@ -1,25 +1,70 @@
 :root {
-  --navy-950: #06111f;
-  --navy-900: #091829;
-  --navy-800: #10253a;
-  --ink: #101b27;
-  --ink-soft: #465463;
-  --muted: #6f7b87;
-  --line: #dce1e5;
-  --line-dark: rgba(255, 255, 255, .13);
-  --paper: #f5f1e9;
-  --neutral: #eef1f2;
-  --white: #fff;
-  --blue: #1676e8;
-  --cyan: #18bddd;
-  --green: #168c63;
-  --amber: #d08a32;
-  --red: #c94a4a;
-  --font-display: 'Manrope', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
-  --container: 1280px;
-  --radius-xs: 5px;
-  --radius-sm: 8px;
-  --radius-lg: 14px;
-  --shadow-product: 0 28px 68px rgba(0, 0, 0, .24);
+  /* Brand Deep Navy & Obsidian Palette (Dark Surfaces) */
+  --navy-950: #030812;
+  --navy-900: #060e1d;
+  --navy-850: #0a1529;
+  --navy-800: #0f1f38;
+  --navy-700: #152b4d;
+
+  /* Off-white & Paper Foundations (Light Surfaces) */
+  --paper-50: #ffffff;
+  --paper-100: #fbfbfd;
+  --paper-200: #f4f5f8;
+  --neutral-warm: #f6f5f1;
+
+  /* Strict Unified Text Colour Scale (10 Core Colours) */
+  --ink-900: #0b111e;
+  --ink-800: #1e293b;
+  --ink-soft: #475569;
+  --ink-muted: #64748b;
+  --ink-subtle: #94a3b8;
+  --white: #ffffff;
+  --cyan-bright: #22d3ee;
+  --blue-primary: #2563eb;
+  --emerald-text: #047857;
+  --amber-text: #b45309;
+  --rose-text: #be123c;
+
+  /* Legacy mappings */
+  --ink: var(--ink-900);
+  --muted: var(--ink-muted);
+  --paper: var(--neutral-warm);
+  --neutral: var(--paper-200);
+  --blue: var(--blue-primary);
+  --green: var(--emerald-text);
+  --red: var(--rose-text);
+  --cyan: #06b6d4;
+
+  /* Lines & Borders */
+  --line-light: rgba(226, 232, 240, 0.85);
+  --line-card: rgba(203, 213, 225, 0.6);
+  --line-dark: rgba(255, 255, 255, 0.08);
+
+  /* Typography Scale (Strict 8-Step System) */
+  --text-xs: 0.75rem;    /* 12px - min size for UI labels & meta */
+  --text-sm: 0.875rem;   /* 14px - secondary body & buttons */
+  --text-base: 1rem;     /* 16px - standard body */
+  --text-lg: 1.125rem;   /* 18px - subheadings & lead text */
+  --text-xl: 1.25rem;    /* 20px - section subheads & card titles */
+  --text-2xl: 1.5rem;    /* 24px - item titles */
+  --text-3xl: 2rem;      /* 32px - secondary headings */
+  --text-display: clamp(2.5rem, 4.5vw, 4.5rem); /* Hero & Major Section Headings */
+
+  /* Font Families */
+  --font-display: 'Manrope', 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --font-body: 'DM Sans', 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Strict Unified Corner Radii (5 Steps Total) */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+
+  /* Shadows & Elevations */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 20px 40px -8px rgba(0, 0, 0, 0.15);
 }
