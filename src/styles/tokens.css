@@ -1,44 +1,48 @@
 :root {
   /* Brand Deep Navy & Obsidian Palette (Dark Surfaces) */
-  --navy-950: #030812;
-  --navy-900: #060e1d;
-  --navy-850: #0a1529;
-  --navy-800: #0f1f38;
-  --navy-700: #152b4d;
+  --navy-950: #02060e;
+  --navy-900: #040a16;
+  --navy-850: #081224;
+  --navy-800: #0d1a33;
+  --navy-700: #132445;
 
   /* Off-white & Paper Foundations (Light Surfaces) */
   --paper-50: #ffffff;
-  --paper-100: #fbfbfd;
-  --paper-200: #f4f5f8;
-  --neutral-warm: #f6f5f1;
+  --paper-100: #f8fafc;
+  --paper-200: #f1f5f9;
+  --neutral-warm: #f8f9fa;
 
-  /* Strict Unified Text Colour Scale (10 Core Colours) */
+  /* Strict Unified Text Colour Scale */
   --ink-900: #0b111e;
   --ink-800: #1e293b;
   --ink-soft: #475569;
   --ink-muted: #64748b;
   --ink-subtle: #94a3b8;
+  --ink-light: #cbd5e1;
   --white: #ffffff;
   --cyan-bright: #22d3ee;
+  --cyan-deep: #06b6d4;
   --blue-primary: #2563eb;
-  --emerald-text: #047857;
-  --amber-text: #b45309;
-  --rose-text: #be123c;
+  --emerald-text: #059669;
+  --amber-text: #d97706;
+  --rose-text: #e11d48;
 
   /* Legacy mappings */
   --ink: var(--ink-900);
   --muted: var(--ink-muted);
-  --paper: var(--neutral-warm);
+  --paper: var(--paper-100);
   --neutral: var(--paper-200);
   --blue: var(--blue-primary);
   --green: var(--emerald-text);
   --red: var(--rose-text);
-  --cyan: #06b6d4;
+  --cyan: var(--cyan-bright);
 
-  /* Lines & Borders */
+  /* Standardized Neutral & Accent Borders */
   --line-light: rgba(226, 232, 240, 0.85);
   --line-card: rgba(203, 213, 225, 0.6);
   --line-dark: rgba(255, 255, 255, 0.08);
+  --line-dark-hover: rgba(255, 255, 255, 0.16);
+  --line-cyan-accent: rgba(34, 211, 238, 0.35);
 
   /* Typography Scale (Strict 8-Step System) */
   --text-xs: 0.75rem;    /* 12px - min size for UI labels & meta */
@@ -48,12 +52,12 @@
   --text-xl: 1.25rem;    /* 20px - section subheads & card titles */
   --text-2xl: 1.5rem;    /* 24px - item titles */
   --text-3xl: 2rem;      /* 32px - secondary headings */
-  --text-display: clamp(2.5rem, 4.5vw, 4.5rem); /* Hero & Major Section Headings */
+  --text-display: clamp(2.5rem, 4.5vw, 4.25rem); /* Hero & Major Section Headings */
 
   /* Font Families */
-  --font-display: 'Manrope', 'Plus Jakarta Sans', -apple-system, sans-serif;
-  --font-body: 'DM Sans', 'Inter', -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-display: 'Manrope', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 
   /* Strict Unified Corner Radii (5 Steps Total) */
   --radius-xs: 6px;
@@ -67,4 +71,5 @@
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
   --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.08);
   --shadow-xl: 0 20px 40px -8px rgba(0, 0, 0, 0.15);
+  --shadow-glow-cyan: 0 4px 24px rgba(6, 182, 212, 0.3);
 }

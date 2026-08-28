@@ -1,378 +1,260 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
+import { motion, useReducedMotion, AnimatePresence } from 'motion/react'
 import { 
   Sparkles, 
-  Zap, 
   CheckCircle2, 
   ArrowDown, 
-  Calendar, 
+  ArrowRight,
   Send, 
-  TrendingUp, 
-  Play, 
-  Pause,
-  Layers,
-  Bot
+  Bot,
+  MessageCircle,
+  TrendingUp,
+  Check
 } from 'lucide-react'
 
-// Step definitions for the loop
-export type PipelinePhase = 'inbound' | 'analyzing' | 'scoring' | 'handover'
-
-const PHASES: { id: PipelinePhase; label: string; duration: number }[] = [
-  { id: 'inbound', label: '1. Inbound Stream', duration: 3200 },
-  { id: 'analyzing', label: '2. AI Qualification', duration: 3400 },
-  { id: 'scoring', label: '3. Intent Scoring', duration: 3200 },
-  { id: 'handover', label: '4. Sales Handover', duration: 4200 },
-]
+// Step definitions for the cinematic 8.8-second loop
+export type FlowPhase = 'inbound' | 'qualifying' | 'scored' | 'handover'
 
 export function HeroPipelineVisual() {
   const reducedMotion = useReducedMotion()
-  const [currentPhaseIndex, setCurrentPhaseIndex] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(true)
+  const [phase, setPhase] = useState<FlowPhase>('inbound')
+  const [scoreCount, setScoreCount] = useState(70)
 
-  const activePhase = PHASES[currentPhaseIndex].id
-
-  // Automated cinematic loop
+  // Controlled 8.8s continuous lifecycle loop
   useEffect(() => {
-    if (!isPlaying || reducedMotion) return
+    if (reducedMotion) {
+      setPhase('handover')
+      setScoreCount(96)
+      return
+    }
 
-    const timer = setTimeout(() => {
-      setCurrentPhaseIndex((prev) => (prev + 1) % PHASES.length)
-    }, PHASES[currentPhaseIndex].duration)
+    const t1 = setTimeout(() => setPhase('qualifying'), 2200)
+    const t2 = setTimeout(() => {
+      setPhase('scored')
+      // Animate score count up
+      let s = 72
+      const interval = setInterval(() => {
+        s += 3
+        if (s >= 96) {
+          setScoreCount(96)
+          clearInterval(interval)
+        } else {
+          setScoreCount(s)
+        }
+      }, 50)
+    }, 4200)
+    const t3 = setTimeout(() => setPhase('handover'), 6500)
+    const t4 = setTimeout(() => {
+      setPhase('inbound')
+      setScoreCount(72)
+    }, 8800)
 
-    return () => clearTimeout(timer)
-  }, [currentPhaseIndex, isPlaying, reducedMotion])
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+      clearTimeout(t3)
+      clearTimeout(t4)
+    }
+  }, [phase === 'inbound', reducedMotion])
 
   return (
-    <div className="pipeline-visual-panel" aria-label="LeadHive Conversation Intelligence Pipeline Visual">
-      {/* Panel Top Navigation & Status Bar */}
-      <div className="pipeline-panel-header">
-        <div className="pipeline-header-left">
-          <div className="pipeline-live-indicator">
-            <span className="live-core-dot" />
-            <span className="live-pulse-wave" />
-          </div>
-          <div className="pipeline-title-group">
-            <strong className="pipeline-title">Omnichannel Qualification Flow</strong>
-            <span className="pipeline-subtitle">Autonomous Real-Time Lead Ingestion</span>
-          </div>
+    <div className="flow-visual-container" aria-label="Lead Intelligence Flow">
+      {/* Top Subtle Label */}
+      <div className="flow-container-header">
+        <div className="flow-live-pill">
+          <span className="live-pulse-dot" />
+          <span>LIVE QUALIFICATION PIPELINE</span>
         </div>
-
-        <div className="pipeline-header-right">
-          <div className="pipeline-latency-badge">
-            <Zap size={11} className="latency-icon" />
-            <span>0.3s Handover</span>
-          </div>
-          <button 
-            type="button" 
-            className="pipeline-playback-btn"
-            onClick={() => setIsPlaying(!isPlaying)}
-            title={isPlaying ? "Pause animation" : "Resume animation"}
-            aria-label={isPlaying ? "Pause animation" : "Resume animation"}
-          >
-            {isPlaying ? <Pause size={11} /> : <Play size={11} />}
-          </button>
-        </div>
+        <span className="flow-channel-tag">WhatsApp · IG · Messenger · Web</span>
       </div>
 
-      {/* Pipeline Phase Stepper Indicator */}
-      <div className="pipeline-stepper-bar">
-        {PHASES.map((p, idx) => (
-          <button
-            key={p.id}
-            type="button"
-            className={`stepper-step ${idx === currentPhaseIndex ? 'active' : ''} ${idx < currentPhaseIndex ? 'completed' : ''}`}
-            onClick={() => {
-              setCurrentPhaseIndex(idx)
-              setIsPlaying(false)
-            }}
-          >
-            <span className="stepper-dot" />
-            <span className="stepper-label">{p.label}</span>
-          </button>
-        ))}
-      </div>
-
-      {/* Main Flow Stage Canvas */}
-      <div className="pipeline-stage-body">
+      <div className="flow-stages-wrapper">
         
         {/* =========================================================
-            ZONE 1: OMNICHANNEL INBOUND SOURCES
+            STAGE 1: INCOMING CONVERSATION (One clean floating card)
             ========================================================= */}
-        <div className="pipeline-zone zone-sources">
-          <div className="zone-header">
-            <span className="zone-tag">ZONE 1 · INBOUND CHANNELS</span>
-            <span className="zone-meta">4 Live Sources Connected</span>
-          </div>
-
-          <div className="sources-pills-row">
-            <div className={`source-channel-pill wa ${activePhase === 'inbound' ? 'active-emitting' : ''}`}>
-              <i className="source-icon wa">◔</i>
-              <span>WhatsApp</span>
-              <span className="source-status-pulse green" />
-            </div>
-            <div className={`source-channel-pill ig ${activePhase === 'inbound' ? 'active-emitting' : ''}`}>
-              <i className="source-icon ig">◎</i>
-              <span>Instagram</span>
-              <span className="source-status-pulse pink" />
-            </div>
-            <div className={`source-channel-pill fb ${activePhase === 'inbound' ? 'active-emitting' : ''}`}>
-              <i className="source-icon fb">f</i>
-              <span>Messenger</span>
-              <span className="source-status-pulse blue" />
-            </div>
-            <div className={`source-channel-pill web ${activePhase === 'inbound' ? 'active-emitting' : ''}`}>
-              <i className="source-icon web">↗</i>
-              <span>Website Chat</span>
-              <span className="source-status-pulse cyan" />
-            </div>
-          </div>
-
-          {/* Inbound Message Snippets */}
-          <div className="inbound-snippets-container">
-            {/* High Intent WhatsApp Card */}
-            <motion.div 
-              className={`message-bubble-card whatsapp-card ${activePhase === 'inbound' ? 'entering' : activePhase === 'analyzing' ? 'in-engine' : activePhase === 'scoring' ? 'scored-dominant' : 'resolved-handover'}`}
-              animate={
-                activePhase === 'inbound' 
-                  ? { y: 0, opacity: 1, scale: 1 } 
-                  : activePhase === 'analyzing'
-                  ? { y: 16, opacity: 0.95, scale: 0.98 }
-                  : activePhase === 'scoring'
-                  ? { y: 24, opacity: 1, scale: 1.02 }
-                  : { y: 32, opacity: 0.2, scale: 0.95 }
-              }
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <div className="msg-header">
-                <div className="msg-author">
-                  <span className="author-badge wa">WA</span>
-                  <strong>Jordan Blake</strong>
-                  <span className="author-time">Just now</span>
-                </div>
-                <span className="msg-channel-tag">WhatsApp Business</span>
+        <div className="flow-stage stage-incoming">
+          <motion.div 
+            className="single-message-card"
+            initial={reducedMotion ? false : { opacity: 0, y: -16, scale: 0.96 }}
+            animate={
+              phase === 'inbound' 
+                ? { opacity: 1, y: 0, scale: 1 } 
+                : phase === 'qualifying'
+                ? { opacity: 0.9, y: 4, scale: 0.98 }
+                : { opacity: 0.45, y: 8, scale: 0.95 }
+            }
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="msg-card-top">
+              <div className="msg-sender">
+                <span className="channel-icon-pill wa">
+                  <MessageCircle size={12} />
+                  <span>WhatsApp</span>
+                </span>
+                <strong>Jordan Blake</strong>
               </div>
-              <p className="msg-text">“Hi, need urgent pricing to deploy across 20 UK retail branches next month.”</p>
-            </motion.div>
-
-            {/* Mid Intent Instagram Card */}
-            <motion.div 
-              className={`message-bubble-card instagram-card ${activePhase === 'scoring' ? 'de-emphasized' : ''}`}
-              animate={
-                activePhase === 'inbound' 
-                  ? { y: 0, opacity: 0.92, scale: 0.98 } 
-                  : activePhase === 'analyzing'
-                  ? { y: 12, opacity: 0.85, scale: 0.95 }
-                  : activePhase === 'scoring'
-                  ? { y: 16, opacity: 0.45, scale: 0.92 }
-                  : { y: 20, opacity: 0.1, scale: 0.9 }
-              }
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <div className="msg-header">
-                <div className="msg-author">
-                  <span className="author-badge ig">IG</span>
-                  <strong>Mia Thorne</strong>
-                </div>
-                <span className="msg-channel-tag">Instagram DM</span>
-              </div>
-              <p className="msg-text">“Can I book an automated routing demo for my 5-person team?”</p>
-            </motion.div>
-
-            {/* Low Intent Web Chat Card */}
-            <motion.div 
-              className="message-bubble-card web-card"
-              animate={
-                activePhase === 'inbound' 
-                  ? { y: 0, opacity: 0.85, scale: 0.96 } 
-                  : activePhase === 'analyzing'
-                  ? { y: 8, opacity: 0.65, scale: 0.92 }
-                  : { y: 12, opacity: 0.15, scale: 0.88 }
-              }
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <div className="msg-header">
-                <div className="msg-author">
-                  <span className="author-badge web">WEB</span>
-                  <strong>Guest #489</strong>
-                </div>
-                <span className="msg-channel-tag">Docs Chat</span>
-              </div>
-              <p className="msg-text">“Where can I see the API documentation?”</p>
-            </motion.div>
-          </div>
+              <span className="msg-time">Just now</span>
+            </div>
+            <p className="msg-quote">“Need pricing for 20 locations starting next month.”</p>
+          </motion.div>
         </div>
 
-        {/* Guided Connecting Stream Lines */}
-        <div className="pipeline-flow-stream" aria-hidden="true">
-          <div className="stream-line line-left" />
-          <div className="stream-line line-center" />
-          <div className="stream-line line-right" />
-          <div className={`stream-data-particle ${activePhase === 'inbound' || activePhase === 'analyzing' ? 'anim-flow' : ''}`} />
+        {/* Animated Connector 1 */}
+        <div className="flow-connector-strip">
+          <div className="flow-line" />
+          <motion.div 
+            className={`flow-particle ${phase === 'inbound' || phase === 'qualifying' ? 'active' : ''}`}
+            animate={
+              phase === 'inbound' || phase === 'qualifying'
+                ? { top: ['0%', '100%'], opacity: [0, 1, 1, 0] }
+                : { opacity: 0 }
+            }
+            transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+          />
         </div>
 
         {/* =========================================================
-            ZONE 2: AI QUALIFICATION ENGINE
+            STAGE 2: AI QUALIFICATION CORE (The Visual Focal Point)
             ========================================================= */}
-        <div className={`pipeline-zone zone-engine ${activePhase === 'analyzing' ? 'engine-active-pulse' : ''}`}>
-          <div className="engine-card">
-            {/* Active Scanning Laser Line */}
-            <div className={`engine-scan-line ${activePhase === 'analyzing' ? 'scanning' : ''}`} />
-
-            <div className="engine-header-row">
-              <div className="engine-core-title">
-                <div className="engine-icon-wrap">
-                  <Bot size={15} className="engine-bot-icon" />
-                  <span className="engine-glow-halo" />
-                </div>
-                <div>
-                  <strong>AI Qualification Engine</strong>
-                  <span className="engine-status-text">
-                    {activePhase === 'inbound' && 'Awaiting incoming streams...'}
-                    {activePhase === 'analyzing' && 'Analyzing commercial intent & budget signals...'}
-                    {activePhase === 'scoring' && 'Calculating conversion probability...'}
-                    {activePhase === 'handover' && 'Handover dispatched in 0.3s'}
-                  </span>
-                </div>
+        <div className={`flow-stage stage-core ${phase === 'qualifying' || phase === 'scored' ? 'core-active' : ''}`}>
+          <div className="ai-core-capsule">
+            <div className="ai-core-orbit" aria-hidden="true" />
+            
+            <div className="ai-core-inner">
+              <div className="ai-brand-badge">
+                <Bot size={15} className="bot-icon" />
+                <span>LeadHive AI</span>
               </div>
-
-              <div className="engine-model-badge">
-                <Sparkles size={11} />
-                <span>LeadHive NLP v4</span>
-              </div>
+              <strong className="ai-core-heading">AI Qualification</strong>
+              <span className="ai-status-indicator">
+                {phase === 'inbound' && 'Listening for intent signals...'}
+                {phase === 'qualifying' && 'Extracting buying intent & budget...'}
+                {phase === 'scored' && 'Commercial criteria validated'}
+                {phase === 'handover' && 'Opportunity routed to sales'}
+              </span>
             </div>
 
-            {/* Extracted Neural Intent Badges */}
-            <div className="engine-signals-grid">
-              <div className={`signal-chip ${activePhase === 'analyzing' || activePhase === 'scoring' || activePhase === 'handover' ? 'signal-detected' : ''}`}>
-                <span className="signal-key">Commercial Intent:</span>
-                <strong className="signal-val">Enterprise Rollout (96%)</strong>
-              </div>
-              <div className={`signal-chip ${activePhase === 'analyzing' || activePhase === 'scoring' || activePhase === 'handover' ? 'signal-detected' : ''}`}>
-                <span className="signal-key">Budget Confirmed:</span>
-                <strong className="signal-val">£42,000 ARR</strong>
-              </div>
-              <div className={`signal-chip ${activePhase === 'analyzing' || activePhase === 'scoring' || activePhase === 'handover' ? 'signal-detected' : ''}`}>
-                <span className="signal-key">Decision Authority:</span>
-                <strong className="signal-val">VP Sales Operations</strong>
-              </div>
-              <div className={`signal-chip ${activePhase === 'analyzing' || activePhase === 'scoring' || activePhase === 'handover' ? 'signal-detected' : ''}`}>
-                <span className="signal-key">Urgency:</span>
-                <strong className="signal-val">Immediate (30 Days)</strong>
-              </div>
+            {/* Emerging AI Signal Pills */}
+            <div className="ai-signals-cluster">
+              <motion.div 
+                className="ai-signal-badge"
+                animate={
+                  phase === 'qualifying' || phase === 'scored' || phase === 'handover'
+                    ? { opacity: 1, scale: 1, y: 0 }
+                    : { opacity: 0, scale: 0.9, y: 6 }
+                }
+                transition={{ duration: 0.35, delay: 0.1 }}
+              >
+                <Check size={11} className="signal-check" />
+                <span>Intent 96%</span>
+              </motion.div>
+
+              <motion.div 
+                className="ai-signal-badge"
+                animate={
+                  phase === 'qualifying' || phase === 'scored' || phase === 'handover'
+                    ? { opacity: 1, scale: 1, y: 0 }
+                    : { opacity: 0, scale: 0.9, y: 6 }
+                }
+                transition={{ duration: 0.35, delay: 0.25 }}
+              >
+                <Check size={11} className="signal-check" />
+                <span>Budget Confirmed</span>
+              </motion.div>
+
+              <motion.div 
+                className="ai-signal-badge"
+                animate={
+                  phase === 'qualifying' || phase === 'scored' || phase === 'handover'
+                    ? { opacity: 1, scale: 1, y: 0 }
+                    : { opacity: 0, scale: 0.9, y: 6 }
+                }
+                transition={{ duration: 0.35, delay: 0.4 }}
+              >
+                <Check size={11} className="signal-check" />
+                <span>20 UK Sites</span>
+              </motion.div>
             </div>
           </div>
         </div>
 
-        {/* Guided Connecting Stream Lines */}
-        <div className="pipeline-flow-stream" aria-hidden="true">
-          <div className="stream-line line-center" />
-          <div className={`stream-data-particle ${activePhase === 'scoring' || activePhase === 'handover' ? 'anim-flow' : ''}`} />
+        {/* Animated Connector 2 */}
+        <div className="flow-connector-strip">
+          <div className="flow-line" />
+          <motion.div 
+            className={`flow-particle ${phase === 'scored' || phase === 'handover' ? 'active' : ''}`}
+            animate={
+              phase === 'scored' || phase === 'handover'
+                ? { top: ['0%', '100%'], opacity: [0, 1, 1, 0] }
+                : { opacity: 0 }
+            }
+            transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+          />
         </div>
 
         {/* =========================================================
-            ZONE 3: INTENT SCORING & LEAD FILTERING
+            STAGE 3: QUALIFIED OPPORTUNITY / SALES HANDOVER
             ========================================================= */}
-        <div className="pipeline-zone zone-scoring">
-          <div className="scoring-outcomes-grid">
-            {/* Low Intent: Filtered Out */}
-            <div className={`score-badge-card low-score ${activePhase === 'scoring' || activePhase === 'handover' ? 'dimmed-out' : ''}`}>
-              <div className="score-top">
-                <span className="score-num">43 / 100</span>
-                <span className="score-tag">Low Intent</span>
+        <div className="flow-stage stage-opportunity">
+          <motion.div 
+            className={`opportunity-dominant-card ${phase === 'scored' || phase === 'handover' ? 'card-active' : ''}`}
+            initial={reducedMotion ? false : { opacity: 0.4, scale: 0.95 }}
+            animate={
+              phase === 'scored' || phase === 'handover'
+                ? { opacity: 1, scale: 1, y: 0 }
+                : { opacity: 0.35, scale: 0.97, y: 4 }
+            }
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {/* Opportunity Card Header */}
+            <div className="opp-header">
+              <div className="opp-tag-pill">
+                <Sparkles size={12} className="sparkle-icon" />
+                <span>QUALIFIED OPPORTUNITY</span>
               </div>
-              <span className="score-action">Auto-FAQ Routed</span>
+              <span className="opp-live-time">Instant Handover</span>
             </div>
 
-            {/* Mid Intent: Automated Nurture */}
-            <div className={`score-badge-card mid-score ${activePhase === 'scoring' || activePhase === 'handover' ? 'secondary-nurture' : ''}`}>
-              <div className="score-top">
-                <span className="score-num">76 / 100</span>
-                <span className="score-tag">SMB Request</span>
-              </div>
-              <span className="score-action">Auto-Nurture Sequence</span>
-            </div>
-
-            {/* High Intent: Prioritized Winner */}
-            <div className={`score-badge-card high-score ${activePhase === 'scoring' || activePhase === 'handover' ? 'highlight-winner' : ''}`}>
-              <div className="score-top">
-                <span className="score-num winner-num">96 / 100</span>
-                <span className="score-tag winner-tag">High Commercial Intent</span>
-              </div>
-              <span className="score-action winner-action">Instant Sales Rep Handover</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Arrow to Final Handover */}
-        <div className="pipeline-handover-pointer" aria-hidden="true">
-          <ArrowDown size={14} className="handover-down-arrow" />
-        </div>
-
-        {/* =========================================================
-            ZONE 4: SALES HANDOVER OUTPUT (FINAL OUTCOME)
-            ========================================================= */}
-        <div className={`pipeline-zone zone-handover ${activePhase === 'handover' ? 'handover-stage-active' : ''}`}>
-          <div className="handover-lead-card">
-            <div className="handover-card-header">
-              <div className="handover-badge-pill">
-                <CheckCircle2 size={13} className="check-icon-green" />
-                <span>SALES-READY OPPORTUNITY</span>
-              </div>
-              <div className="handover-timestamp">0.3s Handover Delivered</div>
-            </div>
-
-            <div className="handover-profile-row">
-              <div className="lead-avatar-wrap">
-                <div className="lead-avatar">JB</div>
-                <span className="channel-corner-icon wa">◔</span>
+            {/* Main Lead Info Row */}
+            <div className="opp-profile-row">
+              <div className="opp-avatar">JB</div>
+              <div className="opp-identity">
+                <h4 className="opp-name">Jordan Blake</h4>
+                <p className="opp-deal">Enterprise Rollout · 20 Locations</p>
               </div>
 
-              <div className="lead-identity">
-                <div className="lead-name-row">
-                  <strong className="lead-name">Jordan Blake</strong>
-                  <span className="lead-verified-pill">Verified Decision Maker</span>
-                </div>
-                <p className="lead-org">VP Sales Operations · Nexus Retail (20 UK Sites)</p>
-              </div>
-
-              <div className="lead-deal-size">
-                <span className="deal-label">Estimated Deal</span>
-                <strong className="deal-val">£42,000 ARR</strong>
+              <div className="opp-score-box">
+                <strong className="opp-score-num">{phase === 'inbound' || phase === 'qualifying' ? 96 : scoreCount}</strong>
+                <span className="opp-score-label">High Intent</span>
               </div>
             </div>
 
-            {/* Instant Sales Dispatch Timeline */}
-            <div className="handover-actions-strip">
-              <div className="action-pill green-glow">
-                <CheckCircle2 size={12} />
-                <span>Intent Scored 96/100</span>
+            {/* Handover Status Action Bar */}
+            <div className="opp-status-footer">
+              <div className={`status-pill ${phase === 'handover' ? 'pill-success' : ''}`}>
+                <CheckCircle2 size={13} className="status-icon" />
+                <span>Sales Ready</span>
               </div>
-              <div className="action-pill blue-glow">
-                <Calendar size={12} />
-                <span>Demo Meeting Auto-Booked</span>
-              </div>
-              <div className="action-pill cyan-glow">
-                <Send size={12} />
-                <span>Routed to AE (Sarah Lin) via Slack</span>
+
+              <div className="status-routed-indicator">
+                <span>Routed to Sales</span>
+                <ArrowRight size={13} className="routed-arrow" />
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
       </div>
 
-      {/* Panel Bottom Footer Bar */}
-      <div className="pipeline-panel-footer">
-        <div className="footer-metric-pill">
-          <TrendingUp size={12} className="metric-icon" />
-          <span>Conversion Lift: <strong>+318%</strong></span>
-        </div>
-        <div className="footer-metric-pill">
-          <Layers size={12} className="metric-icon" />
-          <span>Zero Human Triage Delay</span>
-        </div>
-        <div className="footer-workflow-tag">
-          Omnichannel → AI Qualify → Intent Score → Instant Handover
+      {/* Subtle Bottom Outcome Bar */}
+      <div className="flow-container-footer">
+        <div className="footer-step-flow">
+          <span>Inbound Message</span>
+          <span className="footer-arrow">→</span>
+          <span>AI Qualification</span>
+          <span className="footer-arrow">→</span>
+          <strong className="footer-highlight">Hot Lead Handover</strong>
         </div>
       </div>
     </div>
