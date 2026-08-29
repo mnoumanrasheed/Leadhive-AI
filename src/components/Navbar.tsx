@@ -51,6 +51,10 @@ export function Navbar() {
         </div>
 
         <div className="nav-actions">
+          <span className="nav-live-indicator" aria-label="LeadHive platform active">
+            <span className="nav-live-dot" />
+            <small>Live Engine</small>
+          </span>
           <a href={sectionHref('contact')} className="button button-small nav-cta">
             Book a demo <ArrowUpRight />
           </a>

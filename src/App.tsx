@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Preloader } from './components/Preloader'
 import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
 import { ProblemSection } from './sections/ProblemSection'
@@ -17,10 +18,18 @@ export default function App() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
 
   useEffect(() => {
-    const id = window.location.hash.slice(1)
-    if (!id) return
-    const frame = window.requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView())
-    return () => window.cancelAnimationFrame(frame)
+    // Always start instantly at top Hero on load
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior })
+
+    const handleHash = () => {
+      const id = window.location.hash.slice(1)
+      if (id) {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+
+    window.addEventListener('hashchange', handleHash)
+    return () => window.removeEventListener('hashchange', handleHash)
   }, [])
 
   if (path === '/privacy' || path === '/terms') {
@@ -29,6 +38,7 @@ export default function App() {
 
   return (
     <div className="site-shell">
+      <Preloader />
       <Navbar />
       <main>
         <Hero />
