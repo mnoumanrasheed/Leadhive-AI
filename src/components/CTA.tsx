@@ -1,4 +1,5 @@
-import { useState, type FormEvent } from 'react'
+import { useRef, useState, type FormEvent } from 'react'
+import { motion, useInView, useReducedMotion } from 'motion/react'
 import { ArrowRight, Check, Mail } from 'lucide-react'
 import { Reveal } from './Reveal'
 
@@ -19,6 +20,10 @@ function buildDemoMailto(form: FormData) {
 
 export function CTA() {
   const [status, setStatus] = useState<FormStatus>('idle')
+  const ref = useRef<HTMLElement>(null)
+  const inView = useInView(ref, { amount: 0.18 })
+  const reducedMotion = useReducedMotion()
+  const animate = inView && !reducedMotion
 
   const prepareDemoEmail = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -35,7 +40,11 @@ export function CTA() {
   }
 
   return (
-    <section className="cta-section section-pad" id="contact">
+    <section className="cta-section section-pad" id="contact" ref={ref}>
+      <div className="cta-motion-field" aria-hidden="true">
+        <motion.i animate={animate ? { x: [0, 12, 0], y: [0, -8, 0], scale: [1, 1.03, 1] } : { x: 0, y: 0, scale: 1 }} transition={{ duration: 22, repeat: animate ? Infinity : 0, ease: 'easeInOut' }} />
+        <motion.b animate={animate ? { x: [0, -10, 0], y: [0, 7, 0] } : { x: 0, y: 0 }} transition={{ duration: 18, repeat: animate ? Infinity : 0, ease: 'easeInOut' }} />
+      </div>
       <div className="container">
         <div className="cta-layout">
           <Reveal className="cta-heading">
@@ -57,7 +66,7 @@ export function CTA() {
                 <label><span>Monthly Conversation Volume</span><select name="volume" required defaultValue="" disabled={status === 'submitting'}><option value="" disabled>Select volume</option><option>Under 1,000</option><option>1,000–5,000</option><option>5,000–20,000</option><option>20,000+</option></select></label>
               </div>
               <button className="button" type="submit" disabled={status === 'submitting'}>
-                {status === 'submitting' ? 'Preparing request…' : 'Schedule Demo'} <ArrowRight />
+                {status === 'submitting' ? 'Preparing request…' : 'Schedule Demo'} <motion.span animate={animate ? { x: [0, 3, 0] } : { x: 0 }} transition={{ duration: 2.4, repeat: animate ? Infinity : 0, repeatDelay: 1.2 }}><ArrowRight /></motion.span>
               </button>
               <p className="form-note" id="demo-form-note"><Mail /> This prepares a complete request in your email app.</p>
               <p className={`form-feedback${status === 'error' ? ' is-error' : ''}`} role="status" aria-live="polite">

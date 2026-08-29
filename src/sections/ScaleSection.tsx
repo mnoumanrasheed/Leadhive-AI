@@ -1,5 +1,7 @@
 import { Clock3, Focus, Layers3, TrendingUp } from 'lucide-react'
+import { motion } from 'motion/react'
 import { Reveal } from '../components/Reveal'
+import { useViewportCycle } from '../hooks/useViewportCycle'
 
 const outcomes = [
   {
@@ -29,8 +31,10 @@ const outcomes = [
 ] as const
 
 export function ScaleSection() {
+  const { ref, inView, reducedMotion, step } = useViewportCycle({ steps: outcomes.length, interval: 1800 })
+
   return (
-    <section className="scale-section section-pad" id="results">
+    <section className="scale-section section-pad" id="results" ref={ref}>
       <div className="container">
         <Reveal className="scale-outcome-intro">
           <div><p className="eyebrow">Results at scale</p><h2>Turn conversation volume into operating clarity.</h2></div>
@@ -41,11 +45,12 @@ export function ScaleSection() {
           {outcomes.map((outcome, index) => {
             const Icon = outcome.icon
             return (
-              <Reveal className="scale-outcome" delay={index * 0.055} key={outcome.label}>
+              <Reveal className={`scale-outcome${step === index ? ' is-active' : ''}`} delay={index * 0.075} key={outcome.label}>
                 <div className="scale-outcome-top"><span>0{index + 1}</span><Icon /></div>
                 <small>{outcome.label}</small>
                 <h3>{outcome.title}</h3>
                 <p>{outcome.copy}</p>
+                <span className="scale-outcome-meter"><motion.i animate={{ scaleX: reducedMotion ? 1 : step === index ? 1 : 0.16 }} transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }} /></span>
               </Reveal>
             )
           })}
@@ -53,7 +58,7 @@ export function ScaleSection() {
 
         <Reveal className="scale-shift" aria-label="Operational change with LeadHive">
           <div><small>Without LeadHive</small><strong>First in the inbox</strong><span>Manual review · fragmented context · reactive follow-up</span></div>
-          <i aria-hidden="true" />
+          <i aria-hidden="true"><motion.b animate={inView && !reducedMotion ? { x: [-5, 29], opacity: [0, 1, 0] } : { x: 0, opacity: 0 }} transition={{ duration: 1.6, repeat: inView && !reducedMotion ? Infinity : 0, repeatDelay: 1.1, ease: 'easeInOut' }} /></i>
           <div><small>With LeadHive</small><strong>Best opportunity first</strong><span>Clear priority · complete context · confident human action</span></div>
         </Reveal>
       </div>

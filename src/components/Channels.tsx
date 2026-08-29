@@ -3,7 +3,7 @@ import { motion, useInView, useReducedMotion } from 'motion/react'
 import { Globe2, PhoneCall, Sparkles, Check } from 'lucide-react'
 import { Reveal } from './Reveal'
 
-type SequencePhase = 'idle' | 'incoming' | 'processing' | 'output'
+type SequencePhase = 'idle' | 'incoming' | 'understand' | 'qualify' | 'prioritize' | 'output'
 
 function MessengerIcon() {
   return (
@@ -82,22 +82,31 @@ export function Channels() {
     }
 
     setPhase('incoming')
-    const processTimer = window.setTimeout(() => setPhase('processing'), 1500)
-    const outputTimer = window.setTimeout(() => setPhase('output'), 3200)
+    const understandTimer = window.setTimeout(() => setPhase('understand'), 1400)
+    const qualifyTimer = window.setTimeout(() => setPhase('qualify'), 2150)
+    const prioritizeTimer = window.setTimeout(() => setPhase('prioritize'), 2950)
+    const outputTimer = window.setTimeout(() => setPhase('output'), 3850)
     const nextTimer = window.setTimeout(() => {
       setActiveChannel((current) => (current + 1) % channels.length)
     }, 5600)
 
     return () => {
-      window.clearTimeout(processTimer)
+      window.clearTimeout(understandTimer)
+      window.clearTimeout(qualifyTimer)
+      window.clearTimeout(prioritizeTimer)
       window.clearTimeout(outputTimer)
       window.clearTimeout(nextTimer)
     }
   }, [activeChannel, inView, reducedMotion])
 
   const focusedChannel = hoveredChannel ?? activeChannel
-  const hubStatus = phase === 'processing'
-    ? 'Qualifying conversation…'
+  const processing = ['understand', 'qualify', 'prioritize'].includes(phase)
+  const hubStatus = phase === 'understand'
+    ? 'Understanding intent…'
+    : phase === 'qualify'
+      ? 'Applying qualification criteria…'
+      : phase === 'prioritize'
+        ? 'Prioritizing opportunity…'
     : phase === 'output'
       ? 'Sales-ready opportunity created'
       : 'Listening across every channel'
@@ -152,20 +161,20 @@ export function Channels() {
             </svg>
 
             <motion.div
-              className={`channels-ai-hub${phase === 'processing' ? ' is-processing' : ''}${hoveredChannel !== null ? ' is-reacting' : ''}`}
-              animate={phase === 'processing' && inView && !reducedMotion ? { scale: [1, 1.012, 1] } : { scale: 1 }}
+              className={`channels-ai-hub${processing ? ' is-processing' : ''}${hoveredChannel !== null ? ' is-reacting' : ''}`}
+              animate={processing && inView && !reducedMotion ? { scale: [1, 1.012, 1] } : { scale: 1 }}
               transition={{ duration: 0.75, ease: 'easeInOut' }}
             >
               <motion.i
                 className="channels-ai-pulse"
-                animate={phase === 'processing' && inView && !reducedMotion ? { scale: [0.82, 1.16], opacity: [0.45, 0] } : { opacity: 0 }}
-                transition={{ duration: 0.9, repeat: phase === 'processing' ? 1 : 0, ease: 'easeOut' }}
+                animate={processing && inView && !reducedMotion ? { scale: [0.82, 1.16], opacity: [0.45, 0] } : { opacity: 0 }}
+                transition={{ duration: 0.9, repeat: processing ? 1 : 0, ease: 'easeOut' }}
                 aria-hidden="true"
               />
               <div className="channels-hub-brand"><span className="mark">L</span><small>LeadHive AI</small></div>
               <h3>LeadHive Intelligence</h3>
               <div className="channels-processing-stages" aria-label="Understand, qualify, prioritize">
-                <span>Understand</span><i>→</i><span>Qualify</span><i>→</i><span>Prioritize</span>
+                <span className={phase === 'understand' ? 'is-active' : ''}>Understand</span><i>→</i><span className={phase === 'qualify' ? 'is-active' : ''}>Qualify</span><i>→</i><span className={phase === 'prioritize' ? 'is-active' : ''}>Prioritize</span>
               </div>
               <div className="channels-hub-status"><i /><span>{hubStatus}</span></div>
             </motion.div>

@@ -72,4 +72,18 @@
   --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.08);
   --shadow-xl: 0 20px 40px -8px rgba(0, 0, 0, 0.15);
   --shadow-glow-cyan: 0 4px 24px rgba(6, 182, 212, 0.3);
+  --shadow-card-hover: 0 14px 32px -4px rgba(2, 6, 14, 0.12), 0 4px 12px rgba(6, 182, 212, 0.08);
+
+  /* Unified Premium Motion Easing & Gradients */
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --gradient-accent: linear-gradient(135deg, #38bdf8 0%, #22d3ee 50%, #06b6d4 100%);
+  --gradient-accent-hover: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 50%, #22d3ee 100%);
+  --gradient-glow-cyan: radial-gradient(circle, rgba(34, 211, 238, 0.14) 0%, rgba(37, 99, 235, 0.04) 50%, transparent 70%);
+
+  /* Glassmorphism Surface Tokens */
+  --glass-bg-dark: rgba(4, 10, 22, 0.72);
+  --glass-bg-card: rgba(255, 255, 255, 0.04);
+  --glass-blur-md: blur(12px);
 }
+
