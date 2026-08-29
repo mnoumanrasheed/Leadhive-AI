@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
 import { ProblemSection } from './sections/ProblemSection'
@@ -15,6 +16,13 @@ import { LegalPage } from './pages/LegalPage'
 export default function App() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
 
+  useEffect(() => {
+    const id = window.location.hash.slice(1)
+    if (!id) return
+    const frame = window.requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView())
+    return () => window.cancelAnimationFrame(frame)
+  }, [])
+
   if (path === '/privacy' || path === '/terms') {
     return <LegalPage type={path === '/privacy' ? 'privacy' : 'terms'} />
   }
@@ -26,8 +34,8 @@ export default function App() {
         <Hero />
         <ProblemSection />
         <ProductSection />
-        <TrustSection />
         <WorkflowSection />
+        <TrustSection />
         <ScaleSection />
         <Channels />
         <MobileExperience />

@@ -1,20 +1,37 @@
-import type { FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { ArrowRight, Check, Mail } from 'lucide-react'
 import { Reveal } from './Reveal'
 
+type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
+
+function buildDemoMailto(form: FormData) {
+  const subject = `LeadHive demo request — ${form.get('company') || 'New enquiry'}`
+  const body = [
+    `Name: ${form.get('name')}`,
+    `Work email: ${form.get('email')}`,
+    `Company: ${form.get('company')}`,
+    `Primary channels: ${form.get('channels')}`,
+    `Monthly conversation volume: ${form.get('volume')}`,
+  ].join('\n')
+
+  return `mailto:hello@m3hive.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+}
+
 export function CTA() {
+  const [status, setStatus] = useState<FormStatus>('idle')
+
   const prepareDemoEmail = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const form = new FormData(event.currentTarget)
-    const subject = `LeadHive demo request — ${form.get('company') || 'New enquiry'}`
-    const body = [
-      `Name: ${form.get('name')}`,
-      `Work email: ${form.get('email')}`,
-      `Company: ${form.get('company')}`,
-      `Primary channels: ${form.get('channels')}`,
-      `Monthly conversation volume: ${form.get('volume')}`,
-    ].join('\n')
-    window.location.href = `mailto:hello@m3hive.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    setStatus('submitting')
+
+    try {
+      const mailto = buildDemoMailto(new FormData(event.currentTarget))
+      setStatus('success')
+      window.location.assign(mailto)
+      window.setTimeout(() => setStatus('idle'), 1800)
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
@@ -30,17 +47,23 @@ export function CTA() {
             </div>
           </Reveal>
           <Reveal className="demo-form-wrap" delay={0.08}>
-            <form className="demo-form" onSubmit={prepareDemoEmail}>
+            <form className="demo-form" onSubmit={prepareDemoEmail} aria-busy={status === 'submitting'} aria-describedby="demo-form-note">
               <div className="form-heading"><span>Book a Demo</span><small>All fields are required</small></div>
-              <label><span>Name</span><input name="name" autoComplete="name" required placeholder="Amelia Carter" /></label>
-              <label><span>Work Email</span><input name="email" type="email" autoComplete="email" required placeholder="amelia@company.com" /></label>
-              <label><span>Company</span><input name="company" autoComplete="organization" required placeholder="Northstar Retail" /></label>
+              <label><span>Name</span><input name="name" autoComplete="name" required placeholder="Amelia Carter" disabled={status === 'submitting'} /></label>
+              <label><span>Work Email</span><input name="email" type="email" inputMode="email" autoComplete="email" required placeholder="amelia@company.com" disabled={status === 'submitting'} /></label>
+              <label><span>Company</span><input name="company" autoComplete="organization" required placeholder="Northstar Retail" disabled={status === 'submitting'} /></label>
               <div className="form-row">
-                <label><span>Primary Channels</span><select name="channels" required defaultValue=""><option value="" disabled>Select channels</option><option>WhatsApp</option><option>Instagram</option><option>Facebook Messenger</option><option>Website chat</option><option>Multiple channels</option></select></label>
-                <label><span>Monthly Conversation Volume</span><select name="volume" required defaultValue=""><option value="" disabled>Select volume</option><option>Under 1,000</option><option>1,000–5,000</option><option>5,000–20,000</option><option>20,000+</option></select></label>
+                <label><span>Primary Channels</span><select name="channels" required defaultValue="" disabled={status === 'submitting'}><option value="" disabled>Select channels</option><option>WhatsApp</option><option>Instagram</option><option>Facebook Messenger</option><option>Website chat</option><option>Multiple channels</option></select></label>
+                <label><span>Monthly Conversation Volume</span><select name="volume" required defaultValue="" disabled={status === 'submitting'}><option value="" disabled>Select volume</option><option>Under 1,000</option><option>1,000–5,000</option><option>5,000–20,000</option><option>20,000+</option></select></label>
               </div>
-              <button className="button" type="submit">Schedule Demo <ArrowRight /></button>
-              <p className="form-note"><Mail /> No backend is connected yet. This prepares the request in your email app.</p>
+              <button className="button" type="submit" disabled={status === 'submitting'}>
+                {status === 'submitting' ? 'Preparing request…' : 'Schedule Demo'} <ArrowRight />
+              </button>
+              <p className="form-note" id="demo-form-note"><Mail /> This prepares a complete request in your email app.</p>
+              <p className={`form-feedback${status === 'error' ? ' is-error' : ''}`} role="status" aria-live="polite">
+                {status === 'success' && 'Your request is ready—complete it in your email app.'}
+                {status === 'error' && 'We could not open your email app. Please use hello@m3hive.com instead.'}
+              </p>
             </form>
           </Reveal>
         </div>
