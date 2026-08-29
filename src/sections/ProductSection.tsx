@@ -116,11 +116,11 @@ export function ProductSection() {
             width: '560px',
             height: '560px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(34, 211, 238, 0.08) 0%, rgba(37, 99, 235, 0.03) 50%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(34, 211, 238, 0.26) 0%, rgba(37, 99, 235, 0.1) 50%, transparent 70%)',
             filter: 'blur(90px)',
           }}
-          animate={inView && !reducedMotion ? { x: [0, -12, 0], y: [0, 10, 0], scale: [1, 1.03, 1] } : { x: 0, y: 0 }}
-          transition={{ duration: 22, repeat: inView && !reducedMotion ? Infinity : 0, ease: 'easeInOut' }}
+          animate={inView && !reducedMotion ? { x: [0, -28, 0], y: [0, 18, 0], scale: [1, 1.05, 1] } : { x: 0, y: 0 }}
+          transition={{ duration: 10, repeat: inView && !reducedMotion ? Infinity : 0, ease: 'easeInOut' }}
         />
       </div>
 

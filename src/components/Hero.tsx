@@ -33,7 +33,7 @@ export function Hero() {
           className="hero-ambient-glow hero-glow-headline"
           animate={
             animate
-              ? { x: [0, 10, 0], y: [0, -6, 0], scale: [1, 1.03, 1] }
+              ? { x: [0, 28, 0], y: [0, -18, 0], scale: [1, 1.06, 1] }
               : { x: 0, y: 0, scale: 1 }
           }
           transition={{ duration: 10, repeat: animate ? Infinity : 0, ease: 'easeInOut' }}
@@ -42,7 +42,7 @@ export function Hero() {
           className="hero-ambient-glow hero-glow-flow"
           animate={
             animate
-              ? { x: [0, -8, 0], y: [0, 7, 0], scale: [1, 1.04, 1] }
+              ? { x: [0, -25, 0], y: [0, 20, 0], scale: [1, 1.07, 1] }
               : { x: 0, y: 0, scale: 1 }
           }
           transition={{ duration: 8, repeat: animate ? Infinity : 0, ease: 'easeInOut' }}

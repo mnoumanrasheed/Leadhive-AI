@@ -65,11 +65,11 @@ export function WorkflowSection() {
             width: '520px',
             height: '520px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(34, 211, 238, 0.1) 0%, rgba(37, 99, 235, 0.03) 50%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(34, 211, 238, 0.28) 0%, rgba(37, 99, 235, 0.1) 50%, transparent 70%)',
             filter: 'blur(95px)',
           }}
-          animate={inView && !reducedMotion ? { x: [0, 15, 0], y: [0, -10, 0], scale: [1, 1.04, 1] } : { x: 0, y: 0 }}
-          transition={{ duration: 24, repeat: inView && !reducedMotion ? Infinity : 0, ease: 'easeInOut' }}
+          animate={inView && !reducedMotion ? { x: [0, 30, 0], y: [0, -20, 0], scale: [1, 1.06, 1] } : { x: 0, y: 0 }}
+          transition={{ duration: 10, repeat: inView && !reducedMotion ? Infinity : 0, ease: 'easeInOut' }}
         />
         <motion.div
           style={{
@@ -79,11 +79,11 @@ export function WorkflowSection() {
             width: '480px',
             height: '480px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, rgba(37, 99, 235, 0.02) 50%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.26) 0%, rgba(37, 99, 235, 0.08) 50%, transparent 70%)',
             filter: 'blur(90px)',
           }}
-          animate={inView && !reducedMotion ? { x: [0, -14, 0], y: [0, 8, 0], scale: [1, 1.03, 1] } : { x: 0, y: 0 }}
-          transition={{ duration: 20, repeat: inView && !reducedMotion ? Infinity : 0, ease: 'easeInOut' }}
+          animate={inView && !reducedMotion ? { x: [0, -28, 0], y: [0, 16, 0], scale: [1, 1.05, 1] } : { x: 0, y: 0 }}
+          transition={{ duration: 12, repeat: inView && !reducedMotion ? Infinity : 0, ease: 'easeInOut' }}
         />
       </div>
 

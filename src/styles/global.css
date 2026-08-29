@@ -105,6 +105,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   height: 6px;
   border-radius: 50%;
   background: var(--blue-primary);
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.6);
+  animation: live-dot-pulse 2s infinite ease-in-out;
 }
 
 .eyebrow.light {
@@ -115,6 +117,20 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .eyebrow.light::before {
   background: var(--cyan-bright);
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.8);
+}
+
+@keyframes live-dot-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+    box-shadow: 0 0 4px currentColor;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 1;
+    box-shadow: 0 0 12px currentColor;
+  }
 }
 
 /* Unified 4 Button Styles (Premium Pass) */

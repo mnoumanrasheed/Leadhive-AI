@@ -30,21 +30,21 @@
 }
 
 .hero-glow-headline {
-  top: 15%;
-  left: 6%;
-  width: 480px;
-  height: 480px;
-  background: radial-gradient(circle, rgba(14, 165, 233, 0.05) 0%, transparent 70%);
-  filter: blur(80px);
+  top: 12%;
+  left: 5%;
+  width: 540px;
+  height: 540px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.24) 0%, rgba(37, 99, 235, 0.1) 45%, transparent 70%);
+  filter: blur(85px);
 }
 
 .hero-glow-flow {
-  top: 12%;
-  right: 6%;
-  width: 580px;
-  height: 580px;
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.09) 0%, rgba(14, 165, 233, 0.02) 50%, transparent 70%);
-  filter: blur(90px);
+  top: 10%;
+  right: 5%;
+  width: 620px;
+  height: 620px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.26) 0%, rgba(14, 165, 233, 0.12) 50%, transparent 70%);
+  filter: blur(95px);
 }
 
 /* Delicate, Toned-Down Perspective Floor Grid */
@@ -111,7 +111,8 @@
   height: 6px;
   border-radius: 50%;
   background: var(--cyan-bright);
-  box-shadow: 0 0 6px var(--cyan-bright);
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.8);
+  animation: live-dot-pulse 1.8s infinite ease-in-out;
 }
 
 .eyebrow-icon {
@@ -4511,6 +4512,7 @@
   border-radius: 50%;
   background: var(--cyan-bright);
   box-shadow: 0 0 10px rgba(34, 211, 238, 0.8);
+  animation: live-dot-pulse 1.8s infinite ease-in-out;
 }
 
 .hero-visual-topline small {
@@ -5288,7 +5290,7 @@
   text-transform: uppercase;
   letter-spacing: .04em;
 }
-.problem-live-status > i { width: 6px; height: 6px; border-radius: 50%; background: #10b981; }
+.problem-live-status > i { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.7); animation: live-dot-pulse 1.8s infinite ease-in-out; }
 .problem-live-status svg { width: 14px; color: var(--blue-primary); }
 .problem-pressure-row { position: relative; transition: opacity .4s ease, transform .4s ease, background .4s ease; }
 .problem-pressure-row.is-active { transform: translateX(3px); background: linear-gradient(90deg, rgba(239, 246, 255, .62), transparent 74%); }
@@ -5299,7 +5301,7 @@
 .product-capability-rail { position: relative; }
 .product-rail-heading { flex-wrap: wrap; }
 .product-demo-live { margin-left: auto; display: flex; align-items: center; gap: 5px; color: var(--ink-subtle); font-size: 9px; text-transform: uppercase; }
-.product-demo-live i { width: 5px; height: 5px; border-radius: 50%; background: #10b981; }
+.product-demo-live i { width: 5px; height: 5px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.7); animation: live-dot-pulse 1.8s infinite ease-in-out; }
 .product-auto-progress { width: calc(100% - 20px); height: 1px; margin: -8px 10px 5px; display: block; transform-origin: left; background: linear-gradient(90deg, var(--blue-primary), var(--cyan-bright)); }
 .product-dashboard { position: relative; overflow: hidden; }
 .product-dashboard-scan { position: absolute; z-index: 5; left: 0; right: 0; top: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(14, 165, 233, .72), transparent); pointer-events: none; }
@@ -5346,9 +5348,9 @@
 
 .cta-motion-field { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .cta-motion-field i,
-.cta-motion-field b { position: absolute; border-radius: 50%; opacity: .16; filter: blur(2px); }
-.cta-motion-field i { width: 420px; height: 420px; top: -220px; left: 8%; background: radial-gradient(circle, rgba(34, 211, 238, .26), transparent 68%); }
-.cta-motion-field b { width: 360px; height: 360px; right: 2%; bottom: -210px; background: radial-gradient(circle, rgba(37, 99, 235, .28), transparent 68%); }
+.cta-motion-field b { position: absolute; border-radius: 50%; opacity: .32; filter: blur(2px); }
+.cta-motion-field i { width: 480px; height: 480px; top: -200px; left: 6%; background: radial-gradient(circle, rgba(34, 211, 238, .38), transparent 68%); }
+.cta-motion-field b { width: 420px; height: 420px; right: 2%; bottom: -180px; background: radial-gradient(circle, rgba(37, 99, 235, .42), transparent 68%); }
 .cta-section > .container { position: relative; z-index: 1; }
 .demo-form .button > span { display: inline-flex; }
 
