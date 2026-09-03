@@ -9,11 +9,9 @@ Options -Indexes
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  RewriteRule ^api/contact\.php$ - [L]
-
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
-  RewriteCond %{REQUEST_FILENAME} -d
-  RewriteRule ^ - [L]
-
+  # Pass API calls directly to PHP script without SPA routing
+  RewriteCond %{REQUEST_URI} !^/api/
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule ^ index.html [L]
 </IfModule>

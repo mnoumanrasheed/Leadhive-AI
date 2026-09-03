@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'recaptcha_secret' => 'YOUR_RECAPTCHA_SECRET_KEY',
-    'resend_api_key' => 'YOUR_RESEND_API_KEY',
-    'resend_from_email' => 'support@leadhive-ai.com',
-    'contact_to_email' => 'YOUR_RECEIVING_EMAIL',
+    'resend_api_key' => 'PASTE_RESEND_API_KEY_HERE',
+    'recaptcha_secret_key' => 'PASTE_RECAPTCHA_SECRET_KEY_HERE',
+    'from_email' => 'LeadHive AI <hello@leadhive-ai.com>',
+    'to_email' => 'PASTE_RECEIVING_EMAIL_HERE',
 ];
