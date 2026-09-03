@@ -26,16 +26,22 @@ declare global {
 
 let recaptchaScriptPromise: Promise<void> | null = null
 
-function loadRecaptchaScript() {
-  if (window.grecaptcha) return Promise.resolve()
+function loadRecaptchaScript(): Promise<void> {
+  if (typeof window !== 'undefined' && typeof window.grecaptcha?.render === 'function') {
+    return Promise.resolve()
+  }
 
   if (!recaptchaScriptPromise) {
-    recaptchaScriptPromise = new Promise((resolve, reject) => {
-      const existingScript = document.querySelector<HTMLScriptElement>('script[src^="https://www.google.com/recaptcha/api.js"]')
+    recaptchaScriptPromise = new Promise<void>((resolve, reject) => {
+      const existingScript = document.querySelector<HTMLScriptElement>('script[src*="google.com/recaptcha/api.js"]')
 
       if (existingScript) {
+        if (typeof window.grecaptcha?.render === 'function') {
+          resolve()
+          return
+        }
         existingScript.addEventListener('load', () => resolve(), { once: true })
-        existingScript.addEventListener('error', () => reject(new Error('Unable to load reCAPTCHA.')), { once: true })
+        existingScript.addEventListener('error', () => reject(new Error('Failed to load Google reCAPTCHA script.')), { once: true })
         return
       }
 
@@ -44,12 +50,31 @@ function loadRecaptchaScript() {
       script.async = true
       script.defer = true
       script.onload = () => resolve()
-      script.onerror = () => reject(new Error('Unable to load reCAPTCHA.'))
+      script.onerror = () => reject(new Error('Failed to load Google reCAPTCHA script.'))
       document.head.appendChild(script)
     })
   }
 
   return recaptchaScriptPromise
+}
+
+function waitForRecaptchaReady(timeoutMs = 10000): Promise<void> {
+  if (typeof window !== 'undefined' && typeof window.grecaptcha?.render === 'function') {
+    return Promise.resolve()
+  }
+
+  return new Promise<void>((resolve, reject) => {
+    const startTime = Date.now()
+    const interval = setInterval(() => {
+      if (typeof window.grecaptcha?.render === 'function') {
+        clearInterval(interval)
+        resolve()
+      } else if (Date.now() - startTime > timeoutMs) {
+        clearInterval(interval)
+        reject(new Error('Timed out waiting for Google reCAPTCHA render function to be ready.'))
+      }
+    }, 50)
+  })
 }
 
 const valueBullets = [
@@ -95,34 +120,59 @@ export function CTA() {
   useEffect(() => {
     let cancelled = false
 
+    console.log('[LeadHive reCAPTCHA] site key configured:', Boolean(recaptchaSiteKey))
+
     if (!recaptchaSiteKey || recaptchaSiteKey === 'PASTE_RECAPTCHA_SITE_KEY_HERE') {
       return
     }
 
-    loadRecaptchaScript()
-      .then(() => {
-        if (cancelled || !recaptchaRef.current || recaptchaWidgetId.current !== null || !window.grecaptcha) return
+    async function initRecaptcha() {
+      try {
+        await loadRecaptchaScript()
+        console.log('[LeadHive reCAPTCHA] script loaded')
 
-        recaptchaWidgetId.current = window.grecaptcha.render(recaptchaRef.current, {
-          sitekey: recaptchaSiteKey,
-          callback: (token: string) => {
-            setCaptchaToken(token)
-            setFeedback('')
-            setStatus('idle')
-          },
-          'expired-callback': () => setCaptchaToken(''),
-          'error-callback': () => {
-            setCaptchaToken('')
-            setStatus('error')
-            setFeedback("We couldn't submit your request. Please try again.")
-          },
-        })
-      })
-      .catch(() => {
+        await waitForRecaptchaReady(10000)
+        console.log('[LeadHive reCAPTCHA] render available:', typeof window.grecaptcha?.render)
+
+        if (cancelled || !recaptchaRef.current || recaptchaWidgetId.current !== null) {
+          return
+        }
+
+        // Prevent duplicate rendering in React StrictMode if container has child nodes
+        if (recaptchaRef.current.hasChildNodes()) {
+          return
+        }
+
+        if (typeof window.grecaptcha?.render === 'function') {
+          const widgetId = window.grecaptcha.render(recaptchaRef.current, {
+            sitekey: recaptchaSiteKey,
+            callback: (token: string) => {
+              setCaptchaToken(token)
+              setFeedback('')
+              setStatus('idle')
+            },
+            'expired-callback': () => {
+              setCaptchaToken('')
+            },
+            'error-callback': () => {
+              setCaptchaToken('')
+              setStatus('error')
+              setFeedback("We couldn't submit your request. Please try again.")
+            },
+          })
+
+          recaptchaWidgetId.current = widgetId
+          console.log('[LeadHive reCAPTCHA] widget rendered:', widgetId)
+        }
+      } catch (error) {
         if (cancelled) return
+        console.error('[LeadHive reCAPTCHA] render error:', error)
         setStatus('error')
         setFeedback("We couldn't submit your request. Please try again.")
-      })
+      }
+    }
+
+    initRecaptcha()
 
     return () => {
       cancelled = true
@@ -131,8 +181,12 @@ export function CTA() {
 
   const resetCaptcha = () => {
     setCaptchaToken('')
-    if (recaptchaWidgetId.current !== null && window.grecaptcha) {
-      window.grecaptcha.reset(recaptchaWidgetId.current)
+    if (recaptchaWidgetId.current !== null && typeof window.grecaptcha?.reset === 'function') {
+      try {
+        window.grecaptcha.reset(recaptchaWidgetId.current)
+      } catch (err) {
+        console.error('[LeadHive reCAPTCHA] reset error:', err)
+      }
     }
   }
 
