@@ -1,0 +1,19 @@
+Options -Indexes
+
+<Files "leadhive-config.php">
+  Require all denied
+  Order allow,deny
+  Deny from all
+</Files>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteRule ^api/contact\.php$ - [L]
+
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  RewriteRule ^ index.html [L]
+</IfModule>

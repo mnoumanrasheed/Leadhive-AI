@@ -878,6 +878,12 @@ footer {
   margin-right: 6px;
 }
 
+.footer-brand-link {
+  display: inline-flex !important;
+  color: inherit !important;
+  font: inherit !important;
+}
+
 .footer-grid > div:not(:first-child) {
   display: flex;
   flex-direction: column;
@@ -1436,4 +1442,3 @@ footer {
   font-weight: 600;
   margin-left: 1px;
 }
-

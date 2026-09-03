@@ -64,9 +64,9 @@ export function WhyLeadHive() {
         </div>
       </div>
       <Reveal className="container strategy-line">
-        <div><small>Marketing</small><strong>Generates attention</strong></div><span className="strategy-connector"><ArrowRight /><motion.i animate={inView && !reducedMotion ? { x: [0, 34], opacity: [0, 1, 0] } : { x: 0, opacity: 0 }} transition={{ duration: 1.2, repeat: inView && !reducedMotion ? Infinity : 0, repeatDelay: 2.4 }} /></span>
-        <motion.div className="strategy-center" animate={inView && !reducedMotion ? { scale: [1, 1.012, 1] } : { scale: 1 }} transition={{ duration: 3.6, repeat: inView && !reducedMotion ? Infinity : 0, ease: 'easeInOut' }}><small>LeadHive AI</small><strong>Creates intelligence</strong></motion.div><span className="strategy-connector"><ArrowRight /><motion.i animate={inView && !reducedMotion ? { x: [0, 34], opacity: [0, 1, 0] } : { x: 0, opacity: 0 }} transition={{ duration: 1.2, repeat: inView && !reducedMotion ? Infinity : 0, repeatDelay: 2.4, delay: 1.2 }} /></span>
-        <div><small>Your sales team</small><strong>Closes deals</strong></div>
+        <div className="strategy-step"><span>01</span><small>Marketing</small><strong>Generates attention</strong></div><span className="strategy-connector"><ArrowRight /><motion.i animate={inView && !reducedMotion ? { x: [0, 34], opacity: [0, 1, 0] } : { x: 0, opacity: 0 }} transition={{ duration: 1.2, repeat: inView && !reducedMotion ? Infinity : 0, repeatDelay: 2.4 }} /></span>
+        <motion.div className="strategy-step strategy-center" animate={inView && !reducedMotion ? { scale: [1, 1.012, 1] } : { scale: 1 }} transition={{ duration: 3.6, repeat: inView && !reducedMotion ? Infinity : 0, ease: 'easeInOut' }}><span>02</span><small>LeadHive AI</small><strong>Creates intelligence</strong></motion.div><span className="strategy-connector"><ArrowRight /><motion.i animate={inView && !reducedMotion ? { x: [0, 34], opacity: [0, 1, 0] } : { x: 0, opacity: 0 }} transition={{ duration: 1.2, repeat: inView && !reducedMotion ? Infinity : 0, repeatDelay: 2.4, delay: 1.2 }} /></span>
+        <div className="strategy-step"><span>03</span><small>Your sales team</small><strong>Closes deals</strong></div>
       </Reveal>
       <Reveal className="container intersection-copy">
         <span>Built at the intersection of</span>

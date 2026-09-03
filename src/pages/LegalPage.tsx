@@ -13,7 +13,7 @@ const legalContent = {
       ['Service providers', 'We may use trusted service providers for website hosting, email, analytics, and product delivery. They may process limited information only for the services they provide to us and under appropriate safeguards.'],
       ['Data retention and security', 'We retain information only for as long as reasonably needed for the purpose it was collected, legal requirements, and legitimate business operations. We use proportionate administrative and technical measures to protect it.'],
       ['Your choices', 'You may ask to access, correct, or delete information you have provided, subject to applicable law. You can also opt out of non-essential communications at any time.'],
-      ['Contact', 'Questions about privacy can be sent to hello@m3hive.com. This policy is a working company template and should be reviewed by qualified legal counsel before production use.'],
+      ['Contact', 'Questions about privacy can be sent to support@leadhive-ai.com. This policy is a working company template and should be reviewed by qualified legal counsel before production use.'],
     ],
   },
   terms: {
@@ -25,7 +25,7 @@ const legalContent = {
       ['Illustrative examples', 'Interface data, qualification scenarios, and campaign metrics shown on this website are illustrative demonstrations unless explicitly identified as verified customer results. They are not guarantees of future performance.'],
       ['Intellectual property', 'LeadHive AI, its website, product interfaces, branding, and original content are owned by or licensed to M3Hive. No rights are granted except the limited right to use this website under these terms.'],
       ['Availability and liability', 'We aim to keep this website accurate and available, but provide it on an as-available basis. To the extent permitted by law, we are not liable for indirect losses arising solely from use of this informational website.'],
-      ['Contact and updates', 'Questions can be sent to hello@m3hive.com. We may update these terms as the product and legal requirements evolve. This page is a working company template and should be reviewed by qualified legal counsel before production use.'],
+      ['Contact and updates', 'Questions can be sent to support@leadhive-ai.com. We may update these terms as the product and legal requirements evolve. This page is a working company template and should be reviewed by qualified legal counsel before production use.'],
     ],
   },
 } as const

@@ -18,8 +18,12 @@ export default function App() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
 
   useEffect(() => {
-    // Always start instantly at top Hero on load
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior })
+    if (path === '/contact') {
+      window.setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'instant' as ScrollBehavior }), 0)
+    } else {
+      // Always start instantly at top Hero on load
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior })
+    }
 
     const handleHash = () => {
       const id = window.location.hash.slice(1)
