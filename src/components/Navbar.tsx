@@ -55,8 +55,8 @@ export function Navbar() {
             <span className="nav-live-dot" />
             <small>Live Engine</small>
           </span>
-          <a href="/test-demo" className="button button-small nav-cta">
-            Test Demo <ArrowUpRight />
+          <a href="/contact" className="button button-small nav-cta">
+            Contact Us <ArrowUpRight />
           </a>
           <button 
             className="menu-button" 
@@ -86,8 +86,8 @@ export function Navbar() {
                 <ArrowUpRight />
               </a>
             ))}
-            <a className="button" href="/test-demo" onClick={() => setMenuOpen(false)}>
-              Test Demo <ArrowUpRight />
+            <a className="button" href="/contact" onClick={() => setMenuOpen(false)}>
+              Contact Us <ArrowUpRight />
             </a>
           </motion.div>
         )}

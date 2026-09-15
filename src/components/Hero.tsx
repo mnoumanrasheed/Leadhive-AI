@@ -107,13 +107,13 @@ export function Hero() {
             transition={{ duration: 0.58, ease: EASE }}
           >
             <motion.a
-              href="/test-demo"
+              href="/contact"
               className="hero-primary-cta"
               whileHover={reducedMotion ? undefined : { y: -2 }}
               whileTap={{ scale: 0.985 }}
               transition={{ duration: 0.22, ease: EASE }}
             >
-              <span>Test Demo</span>
+              <span>Contact Us</span>
               <motion.span
                 animate={animate ? { x: [0, 3, 0] } : { x: 0 }}
                 transition={{ duration: 1.8, repeat: animate ? Infinity : 0, ease: 'easeInOut' }}
