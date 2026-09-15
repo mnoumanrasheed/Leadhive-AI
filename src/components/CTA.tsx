@@ -265,7 +265,7 @@ export function CTA() {
             <Reveal>
               <div className="cta-badge">
                 <span className="cta-badge-dot" />
-                <span>Book a Demo</span>
+                <a href="/test-demo">Test Demo</a>
               </div>
             </Reveal>
 

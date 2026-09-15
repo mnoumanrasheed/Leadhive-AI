@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { Preloader } from './components/Preloader'
 import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
@@ -13,6 +13,8 @@ import { CTA } from './components/CTA'
 import { Footer } from './components/Footer'
 import { TrustSection } from './sections/TrustSection'
 import { LegalPage } from './pages/LegalPage'
+
+const TestDemoPage = lazy(() => import('./pages/TestDemoPage'))
 
 export default function App() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
@@ -35,6 +37,10 @@ export default function App() {
     window.addEventListener('hashchange', handleHash)
     return () => window.removeEventListener('hashchange', handleHash)
   }, [])
+
+  if (path === '/test-demo') {
+    return <Suspense fallback={<div role="status" style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#f8fafc', color: '#64748b' }}>Preparing your demo workspace...</div>}><TestDemoPage /></Suspense>
+  }
 
   if (path === '/privacy' || path === '/terms') {
     return <LegalPage type={path === '/privacy' ? 'privacy' : 'terms'} />

@@ -25,7 +25,7 @@ export function Footer() {
         <div>
           <h3>Company</h3>
           <a href={sectionHref('why')}>Why LeadHive</a>
-          <a href={sectionHref('contact')}>Book a Demo</a>
+          <a href="/test-demo">Test Demo</a>
           <a href="/privacy">Privacy</a>
           <a href="/terms">Terms</a>
         </div>

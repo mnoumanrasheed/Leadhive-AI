@@ -10,3 +10,6 @@ vite.config.js
 vite.config.d.ts
 *-preview.png
 qa-*.png
+
+/test-results/
+/playwright-report/
