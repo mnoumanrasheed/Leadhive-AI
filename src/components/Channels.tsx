@@ -1,224 +1,56 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion } from 'motion/react'
-import { Globe2, PhoneCall, Sparkles, Check } from 'lucide-react'
+import { Check, Globe2, Sparkles } from 'lucide-react'
 import { Reveal } from './Reveal'
 
-type SequencePhase = 'idle' | 'incoming' | 'understand' | 'qualify' | 'prioritize' | 'output'
-
-function MessengerIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M20.4 11.5c0 4.7-3.7 8.1-8.5 8.1-.8 0-1.7-.1-2.4-.3L5.8 21l.8-3.3a7.7 7.7 0 0 1-3.1-6.2c0-4.7 3.7-8.1 8.5-8.1s8.4 3.4 8.4 8.1Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
-      <path d="m7.8 13.7 3.1-3.3 2.4 1.8 2.9-3.1-3.2 4.5-2.4-1.8-2.8 1.9Z" fill="currentColor" />
-    </svg>
-  )
-}
-
-function InstagramIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" strokeWidth="1.8" />
-      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
-      <circle cx="17.4" cy="6.8" r="1.1" fill="currentColor" />
-    </svg>
-  )
-}
+function WhatsAppIcon() { return <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a9.9 9.9 0 0 0-8.55 14.9L2 22l5.25-1.37A9.9 9.9 0 1 0 12 2Zm0 18.16c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.11.82.82-3.02-.19-.31a8.22 8.22 0 1 1 6.94 3.82Zm4.52-6.15c-.24-.12-1.47-.73-1.7-.81-.23-.09-.39-.13-.56.12-.17.25-.65.81-.79.98-.14.16-.28.18-.53.06-.25-.12-1.06-.39-2.01-1.24-.74-.65-1.24-1.46-1.39-1.71-.14-.25-.01-.38.11-.5l.38-.44c.12-.14.16-.25.25-.41.08-.17.04-.32-.02-.44l-.76-1.84c-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.78 2.71 4.31 3.8 2.53 1.09 2.53.73 2.99.69.45-.05 1.47-.6 1.67-1.18.21-.59.21-1.09.15-1.19-.06-.1-.22-.16-.47-.28Z"/></svg> }
+function FacebookIcon() { return <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.8 21v-8h2.7l.4-3.1h-3.1V8c0-.9.3-1.5 1.6-1.5H17V3.7c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2v2.1H7.8V13h2.7v8h3.3Z"/></svg> }
+function YouTubeIcon() { return <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.7 4.6 12 4.6 12 4.6s-5.7 0-7.5.5A3 3 0 0 0 2.4 7.2C1.9 9 1.9 12 1.9 12s0 3 .5 4.8a3 3 0 0 0 2.1 2.1c1.8.5 7.5.5 7.5.5s5.7 0 7.5-.5a3 3 0 0 0 2.1-2.1c.5-1.8.5-4.8.5-4.8s0-3-.5-4.8ZM9.9 15.1V8.9l5.4 3.1-5.4 3.1Z"/></svg> }
+function InstagramIcon() { return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" strokeWidth="1.8"/><circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8"/><circle cx="17.4" cy="6.8" r="1.1" fill="currentColor"/></svg> }
 
 const channels = [
-  {
-    id: 'facebook',
-    name: 'Facebook Messenger',
-    shortName: 'Messenger',
-    copy: 'Campaign replies, understood.',
-    icon: MessengerIcon,
-  },
-  {
-    id: 'instagram',
-    name: 'Instagram Direct Messages',
-    shortName: 'Instagram',
-    copy: 'High-intent DMs, qualified.',
-    icon: InstagramIcon,
-  },
-  {
-    id: 'whatsapp',
-    name: 'WhatsApp Business',
-    shortName: 'WhatsApp',
-    copy: 'Demand qualified at scale.',
-    icon: PhoneCall,
-  },
-  {
-    id: 'website',
-    name: 'Website',
-    shortName: 'Website',
-    copy: 'Visitor intent captured live.',
-    icon: Globe2,
-  },
+  { id: 'facebook', name: 'Facebook', shortName: 'Facebook', copy: 'Community conversations, understood.', icon: FacebookIcon },
+  { id: 'youtube', name: 'YouTube', shortName: 'YouTube', copy: 'Viewer intent, captured.', icon: YouTubeIcon },
+  { id: 'instagram', name: 'Instagram Direct Messages', shortName: 'Instagram', copy: 'High-intent DMs, qualified.', icon: InstagramIcon },
+  { id: 'whatsapp', name: 'WhatsApp Business', shortName: 'WhatsApp', copy: 'Demand qualified at scale.', icon: WhatsAppIcon },
+  { id: 'website', name: 'Website', shortName: 'Website', copy: 'Visitor intent captured live.', icon: Globe2 },
 ] as const
-
-const connectionPaths = [
-  'M 22 19 C 34 19, 35 38, 44 45',
-  'M 78 19 C 66 19, 65 38, 56 45',
-  'M 22 67 C 34 67, 35 56, 44 51',
-  'M 78 67 C 66 67, 65 56, 56 51',
-] as const
+const paths = ['M104 58 C172 58 198 180 248 218', 'M300 58 L300 136', 'M496 58 C428 58 402 180 352 218', 'M104 397 C172 397 198 286 248 244', 'M496 397 C428 397 402 286 352 244'] as const
 
 export function Channels() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const inView = useInView(sectionRef, { amount: 0.25 })
+  const ref = useRef<HTMLElement>(null)
+  const inView = useInView(ref, { amount: .25 })
   const reducedMotion = useReducedMotion()
-  const [activeChannel, setActiveChannel] = useState(0)
-  const [hoveredChannel, setHoveredChannel] = useState<number | null>(null)
-  const [phase, setPhase] = useState<SequencePhase>('idle')
-
+  const [active, setActive] = useState(0)
+  const [hovered, setHovered] = useState<number | null>(null)
   useEffect(() => {
-    if (reducedMotion) {
-      setPhase('output')
-      return
-    }
-
-    if (!inView) {
-      setPhase('idle')
-      return
-    }
-
-    setPhase('incoming')
-    const understandTimer = window.setTimeout(() => setPhase('understand'), 1400)
-    const qualifyTimer = window.setTimeout(() => setPhase('qualify'), 2150)
-    const prioritizeTimer = window.setTimeout(() => setPhase('prioritize'), 2950)
-    const outputTimer = window.setTimeout(() => setPhase('output'), 3850)
-    const nextTimer = window.setTimeout(() => {
-      setActiveChannel((current) => (current + 1) % channels.length)
-    }, 5600)
-
-    return () => {
-      window.clearTimeout(understandTimer)
-      window.clearTimeout(qualifyTimer)
-      window.clearTimeout(prioritizeTimer)
-      window.clearTimeout(outputTimer)
-      window.clearTimeout(nextTimer)
-    }
-  }, [activeChannel, inView, reducedMotion])
-
-  const focusedChannel = hoveredChannel ?? activeChannel
-  const processing = ['understand', 'qualify', 'prioritize'].includes(phase)
-  const hubStatus = phase === 'understand'
-    ? 'Understanding intent…'
-    : phase === 'qualify'
-      ? 'Applying qualification criteria…'
-      : phase === 'prioritize'
-        ? 'Prioritizing opportunity…'
-    : phase === 'output'
-      ? 'Sales-ready opportunity created'
-      : 'Listening across every channel'
+    if (!inView || reducedMotion) return
+    const timer = window.setTimeout(() => setActive(current => (current + 1) % channels.length), 7000)
+    return () => window.clearTimeout(timer)
+  }, [active, inView, reducedMotion])
+  const current = hovered ?? active
 
   return (
-    <section className="channels-section section-pad" id="channels" ref={sectionRef}>
-      <div className="channels-section-depth" aria-hidden="true" />
+    <section className="channels-section section-pad" id="channels" ref={ref}>
       <div className="container channels-network-layout">
         <Reveal className="channels-copy">
-          <p className="eyebrow">Unified channels</p>
-          <h2>Built for where your customers already talk to you.</h2>
-          <p>Customers don’t always fill out forms. They send messages. LeadHive turns those conversations into structured opportunities.</p>
-          <div className="channels-proof">
-            <span><Check /></span>
-            <div><small>One connected frontline</small><strong>Every conversation. One intelligence layer.</strong></div>
-          </div>
+          <p className="eyebrow">Unified channels</p><h2>Built for where your customers already talk to you.</h2>
+          <p>Customers don&apos;t always fill out forms. They send messages. LeadHive turns those conversations into structured opportunities.</p>
+          <div className="channels-proof"><span><Check /></span><div><small>One connected frontline</small><strong>Every conversation. One intelligence layer.</strong></div></div>
         </Reveal>
-
-        <Reveal className="channels-network-wrap" delay={0.08}>
-          <div className={`channels-network${hoveredChannel !== null ? ' has-hover' : ''}`}>
-            <svg className="channels-connection-map" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-              {connectionPaths.map((path, index) => (
-                <g key={path} className={focusedChannel === index ? 'is-focused' : ''}>
-                  <path className="channel-connection-base" d={path} pathLength="1" />
-                  {inView && !reducedMotion && phase === 'incoming' && activeChannel === index && (
-                    <motion.path
-                      key={`${activeChannel}-${phase}`}
-                      className="channel-connection-signal"
-                      d={path}
-                      pathLength="1"
-                      strokeDasharray="0.08 0.92"
-                      initial={{ strokeDashoffset: 1, opacity: 0 }}
-                      animate={{ strokeDashoffset: 0, opacity: [0, 1, 1, 0] }}
-                      transition={{ duration: 1.45, ease: 'easeInOut' }}
-                    />
-                  )}
-                </g>
-              ))}
-              <path className="channel-output-line" d="M 50 58 L 50 84" pathLength="1" />
-              {inView && !reducedMotion && phase === 'output' && (
-                <motion.path
-                  key={`output-${activeChannel}`}
-                  className="channel-output-signal"
-                  d="M 50 58 L 50 84"
-                  pathLength="1"
-                  strokeDasharray="0.18 0.82"
-                  initial={{ strokeDashoffset: 1, opacity: 0 }}
-                  animate={{ strokeDashoffset: 0, opacity: [0, 1, 1, 0] }}
-                  transition={{ duration: 1.25, ease: 'easeInOut' }}
-                />
-              )}
+        <Reveal className="channels-network-wrap" delay={.08}>
+          <div className="channels-network">
+            <svg className="channels-connection-map" viewBox="0 0 600 560" aria-hidden="true">
+              {paths.map((path, index) => <g key={path}><path className="channel-connection-base" d={path}/>{inView && !reducedMotion && current === index && <motion.path className="channel-connection-signal" d={path} pathLength="1" strokeDasharray=".1 .9" initial={{ strokeDashoffset: 1, opacity: 0 }} animate={{ strokeDashoffset: 0, opacity: [0, 1, 1, 0] }} transition={{ duration: 2.1, ease: 'easeInOut' }}/>}</g>)}
+              <path className="channel-output-line" d="M300 320 L300 496" />
+              {inView && !reducedMotion && <motion.path className="channel-output-signal" d="M300 320 L300 496" pathLength="1" strokeDasharray=".18 .82" initial={{ strokeDashoffset: 1, opacity: 0 }} animate={{ strokeDashoffset: 0, opacity: [0, 1, 1, 0] }} transition={{ duration: 1.6, delay: 3.8, repeat: Infinity, repeatDelay: 3.6, ease: 'easeInOut' }}/>}
             </svg>
-
-            <motion.div
-              className={`channels-ai-hub${processing ? ' is-processing' : ''}${hoveredChannel !== null ? ' is-reacting' : ''}`}
-              animate={processing && inView && !reducedMotion ? { scale: [1, 1.012, 1] } : { scale: 1 }}
-              transition={{ duration: 0.75, ease: 'easeInOut' }}
-            >
-              <motion.i
-                className="channels-ai-pulse"
-                animate={processing && inView && !reducedMotion ? { scale: [0.82, 1.16], opacity: [0.45, 0] } : { opacity: 0 }}
-                transition={{ duration: 0.9, repeat: processing ? 1 : 0, ease: 'easeOut' }}
-                aria-hidden="true"
-              />
-              <div className="channels-hub-brand"><span className="mark">L</span><small>LeadHive AI</small></div>
-              <h3>LeadHive Intelligence</h3>
-              <div className="channels-processing-stages" aria-label="Understand, qualify, prioritize">
-                <span className={phase === 'understand' ? 'is-active' : ''}>Understand</span><i>→</i><span className={phase === 'qualify' ? 'is-active' : ''}>Qualify</span><i>→</i><span className={phase === 'prioritize' ? 'is-active' : ''}>Prioritize</span>
-              </div>
-              <div className="channels-hub-status"><i /><span>{hubStatus}</span></div>
-            </motion.div>
-
-            <motion.span
-              className="channels-mobile-pulse"
-              animate={inView && !reducedMotion && phase === 'incoming' ? { y: [18, 0], opacity: [0, 1, 0] } : { opacity: 0 }}
-              transition={{ duration: 1.25, ease: 'easeInOut' }}
-              aria-hidden="true"
-            />
-
-            <div className="channels-node-grid">
-              {channels.map((channel, index) => {
-                const Icon = channel.icon
-                const isActive = focusedChannel === index
-                const isSending = activeChannel === index && phase === 'incoming' && inView
-                return (
-                  <button
-                    type="button"
-                    className={`channel-node channel-node-${index}${isActive ? ' is-active' : ''}${isSending ? ' is-sending' : ''}`}
-                    key={channel.id}
-                    onMouseEnter={() => setHoveredChannel(index)}
-                    onMouseLeave={() => setHoveredChannel(null)}
-                    onFocus={() => setHoveredChannel(index)}
-                    onBlur={() => setHoveredChannel(null)}
-                    aria-label={`${channel.name}, connected to LeadHive AI`}
-                  >
-                    <span className={`channel-brand-icon ${channel.id}`}><Icon /></span>
-                    <span className="channel-node-copy"><strong>{channel.shortName}</strong><small>{channel.copy}</small></span>
-                    <span className="channel-connected"><i /> Connected</span>
-                  </button>
-                )
-              })}
-            </div>
-
-            <motion.div
-              className={`channels-lead-output${phase === 'output' ? ' is-ready' : ''}`}
-              animate={phase === 'output' && inView && !reducedMotion ? { y: [3, 0], opacity: [0.7, 1] } : { y: 0, opacity: 1 }}
-              transition={{ duration: 0.45, ease: 'easeOut' }}
-            >
-              <span><Sparkles /></span>
-              <div><small>Qualified output</small><strong>Sales-ready lead</strong></div>
-              <i><Check /></i>
-            </motion.div>
+            {channels.map((channel, index) => {
+              const Icon = channel.icon
+              return <button type="button" className={`channel-node channel-node-${index}${current === index ? ' is-active' : ''}`} key={channel.id} onMouseEnter={() => setHovered(index)} onMouseLeave={() => setHovered(null)} onFocus={() => setHovered(index)} onBlur={() => setHovered(null)} aria-label={`${channel.name}, connected to LeadHive AI`}><span className={`channel-brand-icon ${channel.id}`}><Icon /></span><span className="channel-node-copy"><strong>{channel.shortName}</strong><small>{channel.copy}</small></span></button>
+            })}
+            <div className="channels-ai-hub"><div className="channels-hub-brand"><img src="/favicon.png" alt="" /><small>LeadHive AI</small></div><h3>LeadHive Intelligence</h3><div className="channels-processing-stages"><span>Understand</span><i>&rarr;</i><span>Qualify</span><i>&rarr;</i><span>Prioritize</span></div><p>Commercial intent and qualification signals, connected.</p></div>
+            <div className="channels-lead-output"><span><Sparkles /></span><div><small>Qualified output</small><strong>Sales-ready lead</strong></div><i><Check /></i></div>
           </div>
         </Reveal>
       </div>

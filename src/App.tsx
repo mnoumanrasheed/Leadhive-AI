@@ -13,6 +13,7 @@ import { CTA } from './components/CTA'
 import { Footer } from './components/Footer'
 import { TrustSection } from './sections/TrustSection'
 import { LegalPage } from './pages/LegalPage'
+import { TestDemoPage } from './pages/TestDemoPage'
 
 export default function App() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
@@ -35,6 +36,8 @@ export default function App() {
     window.addEventListener('hashchange', handleHash)
     return () => window.removeEventListener('hashchange', handleHash)
   }, [])
+
+  if (path === '/test-demo') return <TestDemoPage />
 
   if (path === '/privacy' || path === '/terms') {
     return <LegalPage type={path === '/privacy' ? 'privacy' : 'terms'} />
