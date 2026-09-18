@@ -34,23 +34,96 @@ export function Channels() {
     <section className="channels-section section-pad" id="channels" ref={ref}>
       <div className="container channels-network-layout">
         <Reveal className="channels-copy">
-          <p className="eyebrow">Unified channels</p><h2>Built for where your customers already talk to you.</h2>
+          <p className="eyebrow channels-eyebrow"><Sparkles size={13} /> Unified channels</p>
+          <h2>Built for where your customers <span className="channels-gradient-text">already talk to you.</span></h2>
           <p>Customers don&apos;t always fill out forms. They send messages. LeadHive turns those conversations into structured opportunities.</p>
-          <div className="channels-proof"><span><Check /></span><div><small>One connected frontline</small><strong>Every conversation. One intelligence layer.</strong></div></div>
+          <div className="channels-proof">
+            <span><Check /></span>
+            <div>
+              <small>One connected frontline</small>
+              <strong>Every conversation. One intelligence layer.</strong>
+            </div>
+          </div>
         </Reveal>
         <Reveal className="channels-network-wrap" delay={.08}>
           <div className="channels-network">
             <svg className="channels-connection-map" viewBox="0 0 600 560" aria-hidden="true">
-              {paths.map((path, index) => <g key={path}><path className="channel-connection-base" d={path}/>{inView && !reducedMotion && current === index && <motion.path className="channel-connection-signal" d={path} pathLength="1" strokeDasharray=".1 .9" initial={{ strokeDashoffset: 1, opacity: 0 }} animate={{ strokeDashoffset: 0, opacity: [0, 1, 1, 0] }} transition={{ duration: 2.1, ease: 'easeInOut' }}/>}</g>)}
+              {paths.map((path, index) => (
+                <g key={path}>
+                  <path className="channel-connection-base" d={path}/>
+                  {inView && !reducedMotion && current === index && (
+                    <motion.path
+                      className="channel-connection-signal"
+                      d={path}
+                      pathLength="1"
+                      strokeDasharray=".2 .8"
+                      initial={{ strokeDashoffset: 1, opacity: 0 }}
+                      animate={{ strokeDashoffset: [1, 0], opacity: [0, 1, 1, 0] }}
+                      transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+                    />
+                  )}
+                </g>
+              ))}
               <path className="channel-output-line" d="M300 320 L300 496" />
-              {inView && !reducedMotion && <motion.path className="channel-output-signal" d="M300 320 L300 496" pathLength="1" strokeDasharray=".18 .82" initial={{ strokeDashoffset: 1, opacity: 0 }} animate={{ strokeDashoffset: 0, opacity: [0, 1, 1, 0] }} transition={{ duration: 1.6, delay: 3.8, repeat: Infinity, repeatDelay: 3.6, ease: 'easeInOut' }}/>}
+              {inView && !reducedMotion && (
+                <motion.path
+                  className="channel-output-signal"
+                  d="M300 320 L300 496"
+                  pathLength="1"
+                  strokeDasharray=".25 .75"
+                  initial={{ strokeDashoffset: 1, opacity: 0 }}
+                  animate={{ strokeDashoffset: [1, 0], opacity: [0, 1, 1, 0] }}
+                  transition={{ duration: 1.8, delay: 0.6, repeat: Infinity, repeatDelay: 1.2, ease: 'easeInOut' }}
+                />
+              )}
             </svg>
             {channels.map((channel, index) => {
               const Icon = channel.icon
-              return <button type="button" className={`channel-node channel-node-${index}${current === index ? ' is-active' : ''}`} key={channel.id} onMouseEnter={() => setHovered(index)} onMouseLeave={() => setHovered(null)} onFocus={() => setHovered(index)} onBlur={() => setHovered(null)} aria-label={`${channel.name}, connected to LeadHive AI`}><span className={`channel-brand-icon ${channel.id}`}><Icon /></span><span className="channel-node-copy"><strong>{channel.shortName}</strong><small>{channel.copy}</small></span></button>
+              return (
+                <button
+                  type="button"
+                  className={`channel-node channel-node-${index}${current === index ? ' is-active' : ''}`}
+                  key={channel.id}
+                  onMouseEnter={() => setHovered(index)}
+                  onMouseLeave={() => setHovered(null)}
+                  onFocus={() => setHovered(index)}
+                  onBlur={() => setHovered(null)}
+                  aria-label={`${channel.name}, connected to LeadHive AI`}
+                >
+                  <span className={`channel-brand-icon ${channel.id}`}><Icon /></span>
+                  <span className="channel-node-copy">
+                    <strong>{channel.shortName}</strong>
+                    <small>{channel.copy}</small>
+                  </span>
+                  <span className="channel-node-pulse" aria-hidden="true" />
+                </button>
+              )
             })}
-            <div className="channels-ai-hub"><div className="channels-hub-brand"><img src="/favicon.png" alt="" /><small>LeadHive AI</small></div><h3>LeadHive Intelligence</h3><div className="channels-processing-stages"><span>Understand</span><i>&rarr;</i><span>Qualify</span><i>&rarr;</i><span>Prioritize</span></div><p>Commercial intent and qualification signals, connected.</p></div>
-            <div className="channels-lead-output"><span><Sparkles /></span><div><small>Qualified output</small><strong>Sales-ready lead</strong></div><i><Check /></i></div>
+            <div className="channels-ai-hub">
+              <div className="channels-hub-glow" aria-hidden="true" />
+              <div className="channels-hub-brand">
+                <img src="/favicon.png" alt="" />
+                <small>LeadHive AI</small>
+                <span className="channels-hub-live-dot" aria-hidden="true" />
+              </div>
+              <h3>LeadHive Intelligence</h3>
+              <div className="channels-processing-stages">
+                <span className="stage-pill">Understand</span>
+                <i>&rarr;</i>
+                <span className="stage-pill">Qualify</span>
+                <i>&rarr;</i>
+                <span className="stage-pill">Prioritize</span>
+              </div>
+              <p>Commercial intent and qualification signals, connected.</p>
+            </div>
+            <div className="channels-lead-output">
+              <span><Sparkles /></span>
+              <div>
+                <small>Qualified output</small>
+                <strong>Sales-ready lead</strong>
+              </div>
+              <i><Check /></i>
+            </div>
           </div>
         </Reveal>
       </div>

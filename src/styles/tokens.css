@@ -1,4 +1,14 @@
 :root {
+  --navy-950: #02060e;
+  --navy-900: #07101d;
+  --accent-hover: #22d3ee;
+  --nav-height: 72px;
+  --nav-height-mobile: 64px;
+  --nav-background: rgba(2, 6, 14, .94);
+  --nav-background-scrolled: rgba(2, 6, 14, .98);
+  --nav-border: rgba(103, 232, 249, .12);
+  --nav-inner-width: min(1240px, calc(100% - 48px));
+  --nav-inner-width-mobile: calc(100% - 32px);
   --canvas: #f7f8fa;
   --surface: #ffffff;
   --surface-subtle: #fbfcfd;
