@@ -15,3 +15,5 @@ qa-*.png
 /playwright-report/
 
 __pycache__/
+
+.tmp-*
