@@ -82,8 +82,7 @@ export function PlatformSelection({ navigate }: ScreenNavigation) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: reduced ? 0 : 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
-          AI-Powered
-          <span className="yi-title-highlight">YouTube Intelligence</span>
+          AI-Powered YouTube Intelligence
         </motion.h1>
 
         <motion.p

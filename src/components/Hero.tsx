@@ -18,7 +18,7 @@ export function Hero() {
         <motion.div className="hero-copy" initial={reducedMotion ? false : 'hidden'} animate="visible" variants={{ hidden: {}, visible: { transition: { staggerChildren: .09 } } }}>
           <motion.p className="hero-kicker" variants={reveal} transition={{ duration: .48, ease }}>Autonomous sales intelligence</motion.p>
           <motion.h1 className="hero-headline" variants={reveal} transition={{ duration: .7, ease }}>
-            Turn every conversation into <span>a qualified opportunity.</span>
+            Turn every conversation into a qualified opportunity.
           </motion.h1>
           <motion.p className="hero-lead" variants={reveal} transition={{ duration: .58, ease }}>
             LeadHive AI understands, qualifies, and prioritizes inbound conversations across every channel, so your team acts on the opportunities that matter.

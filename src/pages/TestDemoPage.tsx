@@ -12,6 +12,7 @@ import { useYouTubeIntelligence } from '../hooks/useYouTubeIntelligence'
 import { screenFromHash, type DemoScreen } from '../components/test-demo/types'
 import '../styles/test-demo.css'
 import '../styles/youtube-intelligence.css'
+import '../styles/premium-white-demo.css'
 
 export function TestDemoPage() {
   const [screen, setScreen] = useState(screenFromHash)

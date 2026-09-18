@@ -1,0 +1,103 @@
+/* The final visual layer for the marketing site. */
+html, body { background: var(--canvas); color: var(--text); }
+html { background: var(--canvas); }
+body, button, a, input, select, textarea { font-family: var(--font-body); }
+h1, h2, h3 { font-family: var(--font-display); letter-spacing: 0; }
+.section-pad { padding-block: var(--space-section); }
+.section-label, .eyebrow, .hero-kicker, .cta-kicker { color: var(--accent-strong); font-size: var(--text-caption); letter-spacing: 0; text-transform: none; }
+
+.navbar-wrap { height: 72px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, .92); backdrop-filter: blur(16px); }
+.navbar-wrap.is-scrolled { background: rgba(255, 255, 255, .97); border-color: var(--line); }
+.brand img { filter: none; }
+.desktop-nav { gap: var(--space-4); }
+.desktop-nav a { color: var(--text-muted); font-size: 13px; font-weight: 650; }
+.desktop-nav a:after { background: var(--accent); }
+.desktop-nav a:hover { color: var(--text); }
+.button, .hero-primary-cta, .cta-submit-button {
+  min-height: 44px; padding: 0 16px; border: 1px solid var(--accent); border-radius: var(--radius);
+  background: var(--accent); color: #fff; box-shadow: none; font-size: 13px; font-weight: 700;
+}
+.button:hover, .hero-primary-cta:hover, .cta-submit-button:hover:not(:disabled) { background: var(--accent-strong); transform: translateY(-1px); }
+.hero-secondary-cta {
+  min-height: 44px; padding: 0 16px; border: 1px solid var(--line-strong); border-radius: var(--radius);
+  background: var(--surface); color: var(--text-soft); font-size: 13px; font-weight: 700;
+}
+.hero-secondary-cta:hover { border-color: var(--accent); color: var(--text); }
+.menu-button { border-color: var(--line-strong); border-radius: var(--radius); color: var(--text); }
+.mobile-menu { background: var(--surface); border-color: var(--line); box-shadow: var(--shadow); }
+.mobile-menu a:not(.button) { color: var(--text-soft); border-color: var(--line); }
+
+.hero { min-height: 100svh; padding: 132px 0 80px; background: var(--canvas); color: var(--text); }
+.hero-grid { opacity: .28; background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); }
+.hero-grid:after { display: none; }
+.hero-layout { gap: clamp(40px, 6vw, 80px); }
+.hero-kicker { margin-bottom: var(--space-3); }
+.hero-headline { max-width: 12ch; color: var(--text); font-size: var(--text-hero); font-weight: 750; line-height: 1.06; }
+.hero-headline span { color: inherit; }
+.hero-lead { color: var(--text-muted); font-size: 17px; }
+.hero-actions { margin-top: var(--space-6); }
+.hero-metric-line { color: var(--text-muted); }
+.proof-dot { background: var(--accent); }
+.hero-flow-frame, .pipeline-engine, .pipeline-output, .pipeline-channel {
+  border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); color: var(--text);
+}
+.pipeline-header, .pipeline-footer { color: var(--text-muted); }
+.pipeline-header span, .pipeline-engine>small, .pipeline-inputs>small, .pipeline-output>small { color: var(--text-soft); }
+.pipeline-footer { border-color: var(--line); }
+.pipeline-engine>div span { border-radius: var(--radius); background: var(--surface-subtle); color: var(--text-muted); }
+.pipeline-symbol, .pipeline-target { border-radius: var(--radius); background: var(--accent-soft); color: var(--accent-strong); }
+.pipeline-line { background: var(--line-strong); }
+.pipeline-line i, .pipeline-header i:before { background: var(--accent); box-shadow: none; }
+
+.problem-section, .product-section, .workflow-section, .channels-section, .mobile-section, .why-section, .scale-outcome-section, .cta-section, footer { background: var(--canvas); color: var(--text); }
+.problem-editorial-copy>p:not(.section-label), .product-intro>div:last-child p, .mobile-copy>p, .cta-description { color: var(--text-muted); }
+.product-showcase, .channels-flow, .phone, .cta-panel-wrap { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+.product-capability-rail, .product-lead-queue, .product-intelligence-panel, .mobile-summary { border-color: var(--line); border-radius: var(--radius); background: var(--surface); color: var(--text); }
+.product-capability-rail button.active { border-radius: var(--radius); background: var(--accent-soft); color: var(--accent-strong); }
+.channels-ai-hub, .channels-lead-output, .phone-notification { border-color: var(--line); border-radius: var(--radius); background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+.mobile-feature-list, .mobile-feature-row { border-color: var(--line); }
+.mobile-feature-row p, .mobile-feature-row h3, .text-link { color: var(--text-soft); }
+.text-link:hover { color: var(--accent-strong); }
+.cta-section { padding-block: var(--space-section); }
+.cta-watermark, .cta-intelligence-path { display: none; }
+.cta-panel-wrap:before { background: var(--accent); border-radius: var(--radius) var(--radius) 0 0; }
+.cta-panel-inner { padding: var(--space-6); }
+.cta-panel-header p, .form-note { color: var(--text-muted); }
+.demo-form label>span { color: var(--text-soft); font-size: var(--text-caption); }
+.demo-form input, .demo-form select { height: 44px; border-color: var(--line-strong); border-radius: var(--radius); background: var(--surface); color: var(--text); }
+.demo-form input:focus, .demo-form select:focus { border-color: var(--accent); background: var(--surface); box-shadow: var(--shadow-focus); }
+footer { border-top: 1px solid var(--line); }
+footer a, .footer-brand p, .footer-contact small { color: var(--text-muted); }
+footer a:hover { color: var(--accent-strong); }
+
+@media (max-width: 760px) {
+  .hero { padding-top: 112px; }
+  .hero-layout { grid-template-columns: 1fr; }
+  .hero-visual-column { order: 2; }
+  .hero-actions { align-items: stretch; }
+}
+/* Remaining marketing and legal surfaces share the same white system. */
+.product-intelligence-panel { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+.product-panel-icon { border-radius: var(--radius); background: var(--accent-soft); color: var(--accent-strong); }
+.product-intelligence-panel > small, .product-intelligence-panel p, .product-signal-list span { color: var(--text-muted); }
+.product-signal-list { border-color: var(--line); }
+.product-signal-list svg { color: var(--accent-strong); }
+.phone { border-color: var(--line-strong); border-radius: var(--radius); box-shadow: var(--shadow); }
+.phone-top i, .app-head > span { border-radius: var(--radius); background: var(--text); }
+.mobile-summary, .phone-notification { border-color: var(--line); color: var(--text); }
+.mobile-summary > span, .phone-notification > span, .phone-notification small, .phone-notification b { color: var(--text-muted); }
+.channels-ai-hub h3, .channels-ai-hub p, .channels-hub-brand small { color: var(--text-soft); }
+.legal-page { background: var(--canvas); }
+.legal-hero { background: var(--canvas); color: var(--text); border-bottom: 1px solid var(--line); }
+.legal-back, .legal-hero > div > p:not(.eyebrow), .legal-hero small { color: var(--text-muted); }
+.legal-content article p, .legal-content aside { color: var(--text-muted); }
+.legal-content article section { border-color: var(--line); }
+.impact-table { border-color: var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+.impact-head { border-color: var(--line); background: var(--surface-subtle); color: var(--text-muted); letter-spacing: 0; text-transform: none; }
+.workflow-rail button, .workflow-detail { border-color: var(--line); border-radius: var(--radius); background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+.workflow-rail button.is-active { border-color: rgba(22, 171, 197, .28); background: var(--accent-soft); }
+.workflow-rail button small, .workflow-detail > small, .workflow-detail p, .workflow-note { color: var(--text-muted); }
+.workflow-detail-icon { border-radius: var(--radius); background: var(--accent-soft); color: var(--accent-strong); }
+.workflow-detail:after { display: none; }
+.workflow-rail:before { background: var(--line); }
+.workflow-signal { background: var(--accent); box-shadow: none; }
