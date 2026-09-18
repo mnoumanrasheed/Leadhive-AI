@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { animate, motion, useReducedMotion } from 'motion/react'
 import { ArrowRight, ChartNoAxesColumn, Eye, MessageSquare, TrendingUp, Users } from 'lucide-react'
 import { ConnectionRequired, EmptyState, Panel, PanelHeader, ResourceStatus, ScreenHeading, StatusBadge } from '../DemoUI'
@@ -22,13 +22,13 @@ function Counter({ value }: { value: number | null }) {
     return () => control.stop()
   }, [value, reduced])
 
-  return <strong>{value === null ? <span aria-label="Not available">—</span> : display.toLocaleString()}</strong>
+  return <strong>{value === null ? <span aria-label="Not available">-</span> : display.toLocaleString()}</strong>
 }
 
 export function IntelligenceDashboard({ controller: c, navigate }: ScreenNavigation & { controller: YouTubeController }) {
   const [refresh, setRefresh] = useState(0)
   const resource = useYoutubeResource<{ videos: VideoMetrics[] }>(
-    c.channel ? '/analytics?channel=' + encodeURIComponent(c.channel.id) : null,
+    c.channel ? '/analytics/' + encodeURIComponent(c.channel.id) : null,
     refresh
   )
   const videos = resource.data?.videos || []
@@ -142,11 +142,11 @@ export function IntelligenceDashboard({ controller: c, navigate }: ScreenNavigat
               <dl>
                 <div>
                   <dt>Total Channel Views</dt>
-                  <dd>{c.channel.views == null ? '—' : Number(c.channel.views).toLocaleString()}</dd>
+                  <dd>{c.channel.views == null ? '-' : Number(c.channel.views).toLocaleString()}</dd>
                 </div>
                 <div>
                   <dt>Published Videos</dt>
-                  <dd>{c.channel.videos == null ? '—' : Number(c.channel.videos).toLocaleString()}</dd>
+                  <dd>{c.channel.videos == null ? '-' : Number(c.channel.videos).toLocaleString()}</dd>
                 </div>
                 <div>
                   <dt>Monitored Selection</dt>
@@ -170,3 +170,4 @@ export function IntelligenceDashboard({ controller: c, navigate }: ScreenNavigat
     </section>
   )
 }
+

@@ -1,16 +1,10 @@
-import { useState } from 'react'
 import { Check, Files, ImageIcon } from 'lucide-react'
 import { ConnectionRequired, EmptyState, Panel, PanelHeader, ResourceStatus, ScreenHeading, StepActions } from '../DemoUI'
-import { useYoutubeResource, type YouTubeController } from '../../../hooks/useYouTubeIntelligence'
+import { type YouTubeController } from '../../../hooks/useYouTubeIntelligence'
 import type { ScreenNavigation, Video } from '../types'
 
 export function ContentSelection({ controller: c, navigate }: ScreenNavigation & { controller: YouTubeController }) {
-  const [refresh, setRefresh] = useState(0)
-  const resource = useYoutubeResource<{ videos: Video[] }>(
-    c.channel ? '/videos?channel=' + encodeURIComponent(c.channel.id) : null,
-    refresh
-  )
-  const videos = resource.data?.videos || []
+  const videos: Video[] = c.videos
   const allSelected = videos.length > 0 && videos.every(video => c.selection.includes(video.video_id))
 
   function toggle(id: string) {
@@ -45,7 +39,7 @@ export function ContentSelection({ controller: c, navigate }: ScreenNavigation &
         <ConnectionRequired />
       ) : (
         <>
-          <ResourceStatus loading={resource.loading} error={resource.error} retry={() => setRefresh(n => n + 1)} />
+          <ResourceStatus loading={c.loading} error={c.error} retry={c.reload} />
 
           <Panel className="yi-library-shell">
             <PanelHeader title="Channel uploads">
@@ -88,7 +82,7 @@ export function ContentSelection({ controller: c, navigate }: ScreenNavigation &
               </div>
             )}
 
-            {!videos.length && !resource.loading && !resource.error && (
+            {!videos.length && !c.loading && !c.error && (
               <EmptyState icon={<Files size={24} />} title="No channel content found.">
                 Ensure your connected YouTube channel has public videos uploaded.
               </EmptyState>
@@ -98,7 +92,7 @@ export function ContentSelection({ controller: c, navigate }: ScreenNavigation &
           <StepActions
             back={() => navigate('persona')}
             busy={c.busy}
-            disabled={resource.loading || Boolean(resource.error)}
+            disabled={c.loading || Boolean(c.error)}
             next={async () => {
               if (await c.mutate('/selection', { video_ids: c.selection })) navigate('dashboard')
             }}

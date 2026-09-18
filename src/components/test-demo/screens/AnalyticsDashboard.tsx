@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { ArrowLeft, ChartNoAxesColumn, ExternalLink, RefreshCw } from 'lucide-react'
 import { ConnectionRequired, EmptyState, Panel, PanelHeader, ResourceStatus, ScreenHeading } from '../DemoUI'
 import { useYoutubeResource, type YouTubeController } from '../../../hooks/useYouTubeIntelligence'
@@ -7,10 +7,25 @@ import type { ScreenNavigation, VideoMetrics } from '../types'
 export function AnalyticsDashboard({ controller: c, navigate }: ScreenNavigation & { controller: YouTubeController }) {
   const [refresh, setRefresh] = useState(0)
   const resource = useYoutubeResource<{ videos: VideoMetrics[] }>(
-    c.channel ? '/analytics?channel=' + encodeURIComponent(c.channel.id) : null,
+    c.channel ? '/analytics/' + encodeURIComponent(c.channel.id) : null,
     refresh
   )
   const videos = resource.data?.videos || []
+  const totals = videos.reduce(
+    (sum, video) => ({
+      views: sum.views + video.views,
+      comments: sum.comments + video.comments,
+      likes: sum.likes + video.likes,
+    }),
+    { views: 0, comments: 0, likes: 0 }
+  )
+  const engagement = totals.views > 0 ? ((totals.comments + totals.likes) / totals.views) * 100 : 0
+  const summary = [
+    { label: 'Tracked Videos', value: videos.length.toLocaleString(), helper: c.channel?.title || 'Connected channel' },
+    { label: 'Total Views', value: totals.views.toLocaleString(), helper: 'Across monitored content' },
+    { label: 'Comments', value: totals.comments.toLocaleString(), helper: 'Community interactions' },
+    { label: 'Engagement', value: engagement.toFixed(1) + '%', helper: 'Likes and comments per view' },
+  ]
 
   return (
     <section className="yi-analytics-dashboard">
@@ -33,6 +48,16 @@ export function AnalyticsDashboard({ controller: c, navigate }: ScreenNavigation
       ) : (
         <>
           <ResourceStatus loading={resource.loading} error={resource.error} retry={() => setRefresh(n => n + 1)} />
+
+          <div className="yi-analytics-summary" aria-label="Analytics summary">
+            {summary.map(item => (
+              <article className="yi-analytics-stat" key={item.label}>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
+                <small>{item.helper}</small>
+              </article>
+            ))}
+          </div>
 
           <Panel className="td-table-frame">
             <PanelHeader

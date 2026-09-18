@@ -19,7 +19,7 @@ export function CommandCenter({ controller: c, navigate }: ScreenNavigation & { 
     async function poll() {
       try {
         const result = await youtubeRequest<{ logs: Activity[]; running: boolean }>(
-          '/activity?channel=' + encodeURIComponent(selected!),
+          '/api/logs/' + encodeURIComponent(selected!),
           { signal: abort.signal }
         )
         setLogs(result.logs)

@@ -1,17 +1,15 @@
-const ROOT = '/api/youtube'
 const YOUTUBE_API_BASE_URL = import.meta.env.VITE_YOUTUBE_API_URL?.replace(/\/$/, '') || ''
 
 export class YoutubeApiError extends Error {
   constructor(message: string, public status: number) { super(message) }
 }
 
-function isChatPath(path: string) {
-  return path === '/chat' || path.startsWith('/chat?')
+function youtubeUrl(path: string) {
+  return YOUTUBE_API_BASE_URL ? YOUTUBE_API_BASE_URL + path : path
 }
 
-function youtubeUrl(path: string) {
-  if (isChatPath(path)) return YOUTUBE_API_BASE_URL ? YOUTUBE_API_BASE_URL + path : path
-  return ROOT + path
+export function youtubeAuthUrl(path: '/auth/youtube/login' | '/auth/youtube/callback') {
+  return youtubeUrl(path)
 }
 
 async function responseBody(response: Response): Promise<unknown> {
@@ -38,7 +36,7 @@ export async function youtubeRequest<T>(path: string, options: { method?: string
   let response: Response
   try {
     response = await fetch(url, {
-      method: options.method || 'GET', credentials: isChatPath(path) ? 'omit' : 'same-origin', signal: options.signal,
+      method: options.method || 'GET', credentials: 'include', signal: options.signal,
       headers: { Accept: 'application/json', ...(options.body !== undefined ? { 'Content-Type': 'application/json' } : {}), ...(options.csrf ? { 'X-Leadhive-CSRF': options.csrf } : {}) },
       ...(options.body !== undefined ? { body: JSON.stringify(options.body) } : {}),
     })
