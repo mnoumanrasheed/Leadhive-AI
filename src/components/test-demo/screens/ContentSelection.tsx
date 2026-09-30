@@ -1,14 +1,16 @@
 import { Check, Files, ImageIcon } from 'lucide-react'
 import { ConnectionRequired, EmptyState, Panel, PanelHeader, ResourceStatus, ScreenHeading, StepActions } from '../DemoUI'
 import { type YouTubeController } from '../../../hooks/useYouTubeIntelligence'
-import type { ScreenNavigation, Video } from '../types'
+import type { ScreenNavigation } from '../types'
 
 export function ContentSelection({ controller: c, navigate }: ScreenNavigation & { controller: YouTubeController }) {
-  const videos: Video[] = c.videos
-  const allSelected = videos.length > 0 && videos.every(video => c.selection.includes(video.video_id))
+  const videos = c.videos
+  const allSelected = videos.length > 0 && videos.every(video => c.selectedVideoIds.includes(video.video_id))
 
   function toggle(id: string) {
-    c.setSelection(current => (current.includes(id) ? current.filter(value => value !== id) : [...current, id]))
+    c.setSelectedVideoIds(current =>
+      current.includes(id) ? current.filter(value => value !== id) : [...current, id]
+    )
   }
 
   return (
@@ -24,12 +26,12 @@ export function ContentSelection({ controller: c, navigate }: ScreenNavigation &
                 type="checkbox"
                 disabled={!videos.length}
                 checked={allSelected}
-                onChange={() => c.setSelection(allSelected ? [] : videos.map(video => video.video_id))}
+                onChange={() => c.setSelectedVideoIds(allSelected ? [] : videos.map(video => video.video_id))}
               />
               Select All
             </label>
             <span className="yi-selection-count">
-              <strong>{c.selection.length}</strong> of {videos.length} selected
+              <strong>{c.selectedVideoIds.length}</strong> of {videos.length} selected
             </span>
           </div>
         )}
@@ -39,7 +41,7 @@ export function ContentSelection({ controller: c, navigate }: ScreenNavigation &
         <ConnectionRequired />
       ) : (
         <>
-          <ResourceStatus loading={c.loading} error={c.error} retry={c.reload} />
+          <ResourceStatus loading={c.isLoadingVideos} error={c.error} retry={c.reload} />
 
           <Panel className="yi-library-shell">
             <PanelHeader title="Channel uploads">
@@ -49,7 +51,7 @@ export function ContentSelection({ controller: c, navigate }: ScreenNavigation &
             {videos.length > 0 && (
               <div className="yi-video-grid">
                 {videos.map(video => {
-                  const selected = c.selection.includes(video.video_id)
+                  const selected = c.selectedVideoIds.includes(video.video_id)
                   return (
                     <label className={'yi-video-card ' + (selected ? 'is-selected' : '')} key={video.video_id}>
                       <input
@@ -82,7 +84,7 @@ export function ContentSelection({ controller: c, navigate }: ScreenNavigation &
               </div>
             )}
 
-            {!videos.length && !c.loading && !c.error && (
+            {!videos.length && !c.isLoadingVideos && !c.error && (
               <EmptyState icon={<Files size={24} />} title="No channel content found.">
                 Ensure your connected YouTube channel has public videos uploaded.
               </EmptyState>
@@ -91,10 +93,10 @@ export function ContentSelection({ controller: c, navigate }: ScreenNavigation &
 
           <StepActions
             back={() => navigate('persona')}
-            busy={c.busy}
-            disabled={c.loading || Boolean(c.error)}
+            busy={c.isSavingSelection}
+            disabled={c.isLoadingVideos || Boolean(c.error)}
             next={async () => {
-              if (await c.mutate('/selection', { video_ids: c.selection })) navigate('dashboard')
+              if (await c.saveSelection(c.selectedVideoIds)) navigate('dashboard')
             }}
             label="Save & Open Dashboard"
           />

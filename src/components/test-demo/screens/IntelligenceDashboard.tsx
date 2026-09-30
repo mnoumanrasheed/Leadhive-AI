@@ -1,9 +1,9 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { animate, motion, useReducedMotion } from 'motion/react'
 import { ArrowRight, ChartNoAxesColumn, Eye, MessageSquare, TrendingUp, Users } from 'lucide-react'
 import { ConnectionRequired, EmptyState, Panel, PanelHeader, ResourceStatus, ScreenHeading, StatusBadge } from '../DemoUI'
-import { useYoutubeResource, type YouTubeController } from '../../../hooks/useYouTubeIntelligence'
-import type { ScreenNavigation, VideoMetrics } from '../types'
+import type { YouTubeController } from '../../../hooks/useYouTubeIntelligence'
+import type { ScreenNavigation } from '../types'
 
 function Counter({ value }: { value: number | null }) {
   const reduced = useReducedMotion()
@@ -26,12 +26,7 @@ function Counter({ value }: { value: number | null }) {
 }
 
 export function IntelligenceDashboard({ controller: c, navigate }: ScreenNavigation & { controller: YouTubeController }) {
-  const [refresh, setRefresh] = useState(0)
-  const resource = useYoutubeResource<{ videos: VideoMetrics[] }>(
-    c.channel ? '/analytics/' + encodeURIComponent(c.channel.id) : null,
-    refresh
-  )
-  const videos = resource.data?.videos || []
+  const videos = c.analytics
   const sum = (field: 'views' | 'comments' | 'likes') =>
     videos.length ? videos.reduce((total, video) => total + video[field], 0) : null
   const subscribers = c.channel?.subscribers == null ? null : Number(c.channel.subscribers)
@@ -57,7 +52,7 @@ export function IntelligenceDashboard({ controller: c, navigate }: ScreenNavigat
         </button>
       </div>
 
-      <ResourceStatus loading={resource.loading} error={resource.error} retry={() => setRefresh(n => n + 1)} />
+      <ResourceStatus loading={c.isLoading} error={c.error} retry={c.reload} />
 
       <div className="yi-metrics" aria-label="Channel key performance indicators">
         {metrics.map(({ label, value, icon: Icon }) => (
@@ -150,11 +145,11 @@ export function IntelligenceDashboard({ controller: c, navigate }: ScreenNavigat
                 </div>
                 <div>
                   <dt>Monitored Selection</dt>
-                  <dd>{c.selection.length} videos</dd>
+                  <dd>{c.selectedVideoIds.length} videos</dd>
                 </div>
                 <div>
                   <dt>AI Automation</dt>
-                  <dd>{c.running ? 'Active (Running)' : 'Inactive (Standby)'}</dd>
+                  <dd>{(c.botState.running || c.botState.is_running) ? 'Active (Running)' : 'Inactive (Standby)'}</dd>
                 </div>
               </dl>
 
@@ -170,4 +165,3 @@ export function IntelligenceDashboard({ controller: c, navigate }: ScreenNavigat
     </section>
   )
 }
-

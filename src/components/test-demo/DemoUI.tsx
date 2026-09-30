@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { ArrowLeft, ArrowRight, Link2, LoaderCircle } from 'lucide-react'
-import { youtubeAuthUrl } from '../../services/youtubeApi'
+import { initiateYouTubeOAuth } from '../../services/youtubeApi'
 
 export function StatusBadge({ children, tone = 'neutral' }: { children: ReactNode; tone?: 'neutral' | 'success' | 'warning' | 'accent' }) {
   return <span className={'td-status-badge td-status-' + tone}><i aria-hidden="true" />{children}</span>
@@ -67,11 +67,21 @@ export function EmptyState({ icon, title, children, action }: { icon: ReactNode;
   )
 }
 
+/**
+ * Connect YouTube button.
+ * Uses window.location.assign via initiateYouTubeOAuth() because the backend
+ * /auth/youtube/login endpoint returns an HTTP redirect to Google — it is NOT
+ * a JSON API and must not be fetched() as such.
+ */
 export function ConnectButton() {
   return (
-    <a className="button td-button td-button-primary" href={youtubeAuthUrl('/auth/youtube/login')}>
+    <button
+      type="button"
+      className="button td-button td-button-primary"
+      onClick={() => initiateYouTubeOAuth()}
+    >
       <Link2 size={16} /> Connect YouTube
-    </a>
+    </button>
   )
 }
 

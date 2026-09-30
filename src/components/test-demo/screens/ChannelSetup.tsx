@@ -1,11 +1,11 @@
-﻿import { ArrowRight, Check, Link2 } from 'lucide-react'
-import { youtubeAuthUrl } from '../../../services/youtubeApi'
+import { ArrowRight, Check, Link2 } from 'lucide-react'
+import { initiateYouTubeOAuth } from '../../../services/youtubeApi'
 import { ConnectButton, EmptyState, Panel, PanelHeader, ScreenHeading, StatusBadge, StepActions } from '../DemoUI'
 import type { ScreenNavigation } from '../types'
 import type { YouTubeController } from '../../../hooks/useYouTubeIntelligence'
 
 export function ChannelSetup({ controller: c, navigate }: ScreenNavigation & { controller: YouTubeController }) {
-  const channels = c.session?.channels || []
+  const channels = c.channels
   const connectionFailed = new URLSearchParams(window.location.search).has('connection')
 
   return (
@@ -15,9 +15,13 @@ export function ChannelSetup({ controller: c, navigate }: ScreenNavigation & { c
           Authorize YouTube, choose the channel LeadHive should manage, and keep the workspace tied to verified channel data.
         </ScreenHeading>
         {channels.length > 0 && (
-          <a href={youtubeAuthUrl('/auth/youtube/login')} className="td-button td-button-secondary yi-connect-another">
+          <button
+            type="button"
+            className="td-button td-button-secondary yi-connect-another"
+            onClick={() => initiateYouTubeOAuth()}
+          >
             <Link2 size={15} /> Connect another account
-          </a>
+          </button>
         )}
       </div>
 
@@ -26,6 +30,8 @@ export function ChannelSetup({ controller: c, navigate }: ScreenNavigation & { c
           The connection could not be completed. Try connecting again.
         </p>
       )}
+
+      {c.error && <p className="td-error" role="alert">{c.error}</p>}
 
       <div className="yi-channel-onboarding">
         <aside className="yi-channel-intro" aria-label="YouTube connection onboarding">
@@ -70,9 +76,9 @@ export function ChannelSetup({ controller: c, navigate }: ScreenNavigation & { c
           <div className="yi-account-list">
             {channels.length ? (
               channels.map(channel => {
-                const selected = c.session?.selected === channel.id
+                const isActive = c.activeChannelId === channel.id
                 return (
-                  <article className={'yi-channel-row ' + (selected ? 'is-selected' : '')} key={channel.id}>
+                  <article className={'yi-channel-row ' + (isActive ? 'is-selected' : '')} key={channel.id}>
                     <div className="yi-account-avatar">
                       {channel.thumbnail ? (
                         <img className="yi-channel-avatar" src={channel.thumbnail} alt="" />
@@ -81,22 +87,23 @@ export function ChannelSetup({ controller: c, navigate }: ScreenNavigation & { c
                       )}
                     </div>
                     <div className="yi-account-details">
-                      <StatusBadge tone={selected ? 'accent' : 'success'}>
-                        {selected ? 'Selected channel' : 'Connected'}
+                      <StatusBadge tone={isActive ? 'accent' : 'success'}>
+                        {isActive ? 'Selected channel' : 'Connected'}
                       </StatusBadge>
                       <h3>{channel.title}</h3>
                       <p>YouTube channel</p>
                     </div>
-                    {selected && (
+                    {isActive && (
                       <span className="yi-row-check" aria-label="Selected">
                         <Check size={16} />
                       </span>
                     )}
                     <button
-                      disabled={c.busy}
+                      disabled={c.isBusy}
                       className="td-button td-button-secondary yi-account-select"
-                      onClick={async () => {
-                        if (await c.chooseChannel(channel.id)) navigate('persona')
+                      onClick={() => {
+                        c.selectChannel(channel.id)
+                        navigate('persona')
                       }}
                     >
                       Select <ArrowRight size={15} />

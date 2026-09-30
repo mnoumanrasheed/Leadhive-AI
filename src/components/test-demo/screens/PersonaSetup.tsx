@@ -1,10 +1,11 @@
-import { Building2, Globe2, Sparkles } from 'lucide-react'
+import { Building2, Sparkles } from 'lucide-react'
 import { ConnectionRequired, Panel, PanelHeader, ScreenHeading, StatusBadge, StepActions } from '../DemoUI'
 import type { Profile, ScreenNavigation } from '../types'
 import type { YouTubeController } from '../../../hooks/useYouTubeIntelligence'
 
 export function PersonaSetup({ controller: c, navigate }: ScreenNavigation & { controller: YouTubeController }) {
-  const update = (key: keyof Profile, value: string) => c.setProfile({ ...c.profile, [key]: value })
+  const update = (key: keyof Profile, value: Profile[keyof Profile]) =>
+    c.setProfile(prev => ({ ...prev, [key]: value }))
 
   return (
     <section className="yi-persona-setup">
@@ -18,7 +19,7 @@ export function PersonaSetup({ controller: c, navigate }: ScreenNavigation & { c
         <form
           onSubmit={async event => {
             event.preventDefault()
-            if (await c.mutate('/profile', c.profile)) navigate('content')
+            if (await c.saveProfile(c.profile)) navigate('content')
           }}
         >
           <div className="yi-persona-workspace">
@@ -30,6 +31,8 @@ export function PersonaSetup({ controller: c, navigate }: ScreenNavigation & { c
                 Set the communication style, core offerings, and behavioral guardrails for AI engagement.
               </PanelHeader>
 
+              {c.error && <p className="td-error" role="alert">{c.error}</p>}
+
               <div className="yi-persona-fields">
                 <label>
                   <span>Business / Brand Name</span>
@@ -37,7 +40,7 @@ export function PersonaSetup({ controller: c, navigate }: ScreenNavigation & { c
                     <Building2 size={15} aria-hidden="true" />
                     <input
                       required
-                      maxLength={250}
+                      maxLength={200}
                       value={c.profile.business_name}
                       onChange={e => update('business_name', e.target.value)}
                       placeholder="e.g. Acme Studio"
@@ -45,53 +48,27 @@ export function PersonaSetup({ controller: c, navigate }: ScreenNavigation & { c
                   </span>
                 </label>
 
-                <label>
-                  <span>Website URL</span>
-                  <span className="yi-field-control">
-                    <Globe2 size={15} aria-hidden="true" />
-                    <input
-                      type="url"
-                      required
-                      value={c.profile.website}
-                      onChange={e => update('website', e.target.value)}
-                      placeholder="https://example.com"
-                    />
-                  </span>
-                </label>
-
                 <label className="yi-field-wide">
-                  <span>Brand Tone</span>
+                  <span>Brand Tone / Voice</span>
                   <select
-                    required
-                    value={c.profile.brand_tone}
-                    onChange={e => update('brand_tone', e.target.value)}
+                    value={c.profile.tone}
+                    onChange={e => update('tone', e.target.value)}
                   >
                     <option value="">Select a conversational tone</option>
                     <option value="Professional & Helpful">Professional & Helpful</option>
                     <option value="Casual & Friendly">Casual & Friendly</option>
                     <option value="Witty & Humorous">Witty & Humorous</option>
+                    <option value="Authoritative & Expert">Authoritative & Expert</option>
                   </select>
                 </label>
 
                 <label className="yi-field-wide">
-                  <span>Core Services & Offerings</span>
+                  <span>Core Offer / Services Description</span>
                   <textarea
                     rows={4}
-                    required
-                    value={c.profile.services}
-                    onChange={e => update('services', e.target.value)}
+                    value={c.profile.offer}
+                    onChange={e => update('offer', e.target.value)}
                     placeholder="Briefly describe what your business does and key solutions offered..."
-                  />
-                </label>
-
-                <label className="yi-field-wide">
-                  <span>Rules & Response Directives</span>
-                  <textarea
-                    rows={4}
-                    required
-                    value={c.profile.ai_rules}
-                    onChange={e => update('ai_rules', e.target.value)}
-                    placeholder="E.g., Always direct pricing queries to the website; never make promises on timelines..."
                   />
                 </label>
               </div>
@@ -113,25 +90,21 @@ export function PersonaSetup({ controller: c, navigate }: ScreenNavigation & { c
                   <Sparkles size={20} />
                 </span>
                 <strong>{c.profile.business_name || 'Your Brand'}</strong>
-                <small>{c.profile.brand_tone || 'Voice not selected'}</small>
+                <small>{c.profile.tone || 'Voice not selected'}</small>
               </div>
 
               <dl className="yi-preview-list">
-                <div>
-                  <dt>Website</dt>
-                  <dd>{c.profile.website || 'Not specified'}</dd>
-                </div>
                 <div>
                   <dt>Channel</dt>
                   <dd>{c.channel.title}</dd>
                 </div>
                 <div>
-                  <dt>Core Services</dt>
-                  <dd>{c.profile.services || 'Describe what LeadHive represents.'}</dd>
+                  <dt>Offer / Services</dt>
+                  <dd>{c.profile.offer || 'Describe what LeadHive represents.'}</dd>
                 </div>
                 <div>
-                  <dt>Directives</dt>
-                  <dd>{c.profile.ai_rules || 'No communication constraints specified.'}</dd>
+                  <dt>Tone</dt>
+                  <dd>{c.profile.tone || 'Not selected'}</dd>
                 </div>
               </dl>
             </aside>
@@ -140,7 +113,7 @@ export function PersonaSetup({ controller: c, navigate }: ScreenNavigation & { c
           <StepActions
             back={() => navigate('channel')}
             submit
-            busy={c.busy || c.loading}
+            busy={c.isSavingProfile || c.isLoading}
             label="Save & Select Videos"
           />
         </form>

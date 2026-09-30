@@ -21,10 +21,9 @@ Use `localhost` consistently for the frontend: OAuth and request-origin validati
 are bound to `LEADHIVE_PUBLIC_URL`. For local preview on another port, set that value
 to the preview origin before starting the backend.
 
-This workspace's ignored `.env.local` forwards `/api/youtube/*` to
-`http://127.0.0.1:8001`, leaving the pre-existing service on port 8000 alone.
-The configuration fallback when no override is present is port 8000.
-Override that target with the server-only `YOUTUBE_BACKEND_ORIGIN` variable.
+The ignored `.env.local` sets `YOUTUBE_BACKEND_ORIGIN` for Vite's development
+proxy. Browser calls stay on same-origin `/api/youtube/*` paths. The LeadHive
+adapter should run on port 8001; port 8000 belongs to the pre-existing service.
 Never put Google/Gemini keys, OAuth tokens, or client secrets in a `VITE_*` variable.
 
 ## Backend installation and existing UI
@@ -56,9 +55,9 @@ a shared server-side session store.
 ## Production routing
 
 Deploy the LeadHive frontend and the Python adapter behind one HTTPS origin.
-Set `LEADHIVE_PUBLIC_URL=https://leadhive-ai.com` on the Python server and register
-`https://leadhive-ai.com/api/youtube/auth/callback` in Google Cloud.
-Reverse proxy `/api/youtube/*` to the Python server before the SPA fallback.
+Set `LEADHIVE_PUBLIC_URL` to the public frontend origin on the Python server and
+register `<LEADHIVE_PUBLIC_URL>/api/youtube/auth/callback` in Google Cloud.
+Vercel rewrites `/api/youtube/*` to the configured adapter before the SPA fallback.
 Keep the existing PHP contact endpoint on its current handler.
 The Vite development proxy is not a production proxy. No production deployment
 or Google Console changes are performed by this implementation.

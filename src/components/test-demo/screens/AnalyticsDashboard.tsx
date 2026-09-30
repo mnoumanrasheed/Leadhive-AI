@@ -1,16 +1,10 @@
-﻿import { useState } from 'react'
 import { ArrowLeft, ChartNoAxesColumn, ExternalLink, RefreshCw } from 'lucide-react'
 import { ConnectionRequired, EmptyState, Panel, PanelHeader, ResourceStatus, ScreenHeading } from '../DemoUI'
-import { useYoutubeResource, type YouTubeController } from '../../../hooks/useYouTubeIntelligence'
-import type { ScreenNavigation, VideoMetrics } from '../types'
+import type { YouTubeController } from '../../../hooks/useYouTubeIntelligence'
+import type { ScreenNavigation } from '../types'
 
 export function AnalyticsDashboard({ controller: c, navigate }: ScreenNavigation & { controller: YouTubeController }) {
-  const [refresh, setRefresh] = useState(0)
-  const resource = useYoutubeResource<{ videos: VideoMetrics[] }>(
-    c.channel ? '/analytics/' + encodeURIComponent(c.channel.id) : null,
-    refresh
-  )
-  const videos = resource.data?.videos || []
+  const videos = c.analytics
   const totals = videos.reduce(
     (sum, video) => ({
       views: sum.views + video.views,
@@ -34,8 +28,8 @@ export function AnalyticsDashboard({ controller: c, navigate }: ScreenNavigation
           Real-time view counts, comments, and community engagement metrics verified from YouTube.
         </ScreenHeading>
         <div className="yi-analytics-actions">
-          <button className="td-button td-button-secondary" onClick={() => setRefresh(n => n + 1)}>
-            <RefreshCw size={14} className={resource.loading ? 'td-spin' : ''} /> Refresh Data
+          <button className="td-button td-button-secondary" onClick={c.reload}>
+            <RefreshCw size={14} className={c.isLoadingAnalytics ? 'td-spin' : ''} /> Refresh Data
           </button>
           <button className="td-button td-button-secondary" onClick={() => navigate('dashboard')}>
             <ArrowLeft size={15} /> Back to Overview
@@ -47,7 +41,7 @@ export function AnalyticsDashboard({ controller: c, navigate }: ScreenNavigation
         <ConnectionRequired />
       ) : (
         <>
-          <ResourceStatus loading={resource.loading} error={resource.error} retry={() => setRefresh(n => n + 1)} />
+          <ResourceStatus loading={c.isLoadingAnalytics} error={c.error} retry={c.reload} />
 
           <div className="yi-analytics-summary" aria-label="Analytics summary">
             {summary.map(item => (
@@ -98,7 +92,7 @@ export function AnalyticsDashboard({ controller: c, navigate }: ScreenNavigation
                       <td className="td-col-num yi-cell">{video.likes.toLocaleString()}</td>
                     </tr>
                   ))}
-                  {!videos.length && !resource.loading && !resource.error && (
+                  {!videos.length && !c.isLoadingAnalytics && !c.error && (
                     <tr>
                       <td colSpan={4}>
                         <EmptyState icon={<ChartNoAxesColumn size={24} />} title="No analytics available yet.">
