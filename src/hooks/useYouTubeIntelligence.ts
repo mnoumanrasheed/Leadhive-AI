@@ -187,8 +187,13 @@ export function useYouTubeIntelligence() {
       }
 
       const channels = workspace.channels.map(mapChannel)
-      // Prefer channel_id from workspace (last used), else first channel
-      const activeChannelId = workspace.channel_id ?? channels[0]?.id ?? null
+
+      // Validate channel_id from query parameter if provided by OAuth return flow
+      const urlParams = new URLSearchParams(window.location.search)
+      const urlChannelId = urlParams.get('channel_id')
+      const validUrlChannel = urlChannelId ? channels.find(c => c.id === urlChannelId) : null
+
+      const activeChannelId = validUrlChannel?.id ?? workspace.channel_id ?? channels[0]?.id ?? null
 
       patch({
         channels,

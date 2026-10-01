@@ -29,6 +29,36 @@ export function TestDemoPage() {
     }
   }, [])
 
+  // Auto-advance onboarding step upon successful OAuth return once workspace is restored
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search)
+    const authState = searchParams.get('auth')
+
+    if (authState === 'success' && !controller.isInitializing && controller.channel) {
+      let nextScreen: DemoScreen = 'channel'
+      if (!controller.profile.business_name) {
+        nextScreen = 'persona'
+      } else if (controller.selectedVideoIds.length === 0) {
+        nextScreen = 'content'
+      } else {
+        nextScreen = 'command-center'
+      }
+
+      window.location.hash = nextScreen
+      setScreen(nextScreen)
+
+      // Clean temporary OAuth query parameters from browser URL
+      const cleanUrl = window.location.pathname + window.location.hash
+      window.history.replaceState(null, '', cleanUrl)
+    } else if (authState === 'failed' && !controller.isInitializing) {
+      window.location.hash = 'channel'
+      setScreen('channel')
+
+      const cleanUrl = window.location.pathname + window.location.hash
+      window.history.replaceState(null, '', cleanUrl)
+    }
+  }, [controller.isInitializing, controller.channel, controller.profile.business_name, controller.selectedVideoIds.length])
+
   function navigate(target: DemoScreen) {
     window.location.hash = target
   }
@@ -38,7 +68,7 @@ export function TestDemoPage() {
   function renderScreen() {
     switch (screen) {
       case 'platform':
-        return <PlatformSelection navigate={navigate} />
+        return <PlatformSelection {...props} />
       case 'channel':
         return <ChannelSetup {...props} />
       case 'persona':

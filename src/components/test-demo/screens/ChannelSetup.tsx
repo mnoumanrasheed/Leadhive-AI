@@ -6,7 +6,8 @@ import type { YouTubeController } from '../../../hooks/useYouTubeIntelligence'
 
 export function ChannelSetup({ controller: c, navigate }: ScreenNavigation & { controller: YouTubeController }) {
   const channels = c.channels
-  const connectionFailed = new URLSearchParams(window.location.search).has('connection')
+  const searchParams = new URLSearchParams(window.location.search)
+  const connectionFailed = searchParams.has('connection') || searchParams.get('auth') === 'failed'
 
   return (
     <section className="yi-channel-setup">

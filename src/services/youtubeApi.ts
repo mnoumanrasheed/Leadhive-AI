@@ -365,8 +365,9 @@ export function getYouTubeSession(signal?: AbortSignal): Promise<YouTubeSession>
   return apiRequest<YouTubeSession>('/api/youtube/session', { signal })
 }
 
-export function getChannels(signal?: AbortSignal): Promise<ChannelPayload[]> {
-  return apiRequest<ChannelPayload[]>('/api/channels', { signal })
+export async function getChannels(signal?: AbortSignal): Promise<ChannelPayload[]> {
+  const res = await apiRequest<{ channels: ChannelPayload[] }>('/api/channels', { signal })
+  return res.channels ?? []
 }
 
 export function logout(signal?: AbortSignal): Promise<void> {

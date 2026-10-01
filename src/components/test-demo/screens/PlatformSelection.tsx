@@ -1,8 +1,9 @@
 import { useRef, type PointerEvent } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
-import { ArrowRight, Bot, Check, Cpu, MessageCircle, Send, Sparkles } from 'lucide-react'
+import { ArrowRight, Bot, Check, Cpu, LoaderCircle, MessageCircle, Send, Sparkles } from 'lucide-react'
 import { ConnectButton } from '../DemoUI'
-import type { ScreenNavigation } from '../types'
+import type { DemoScreen, ScreenNavigation } from '../types'
+import type { YouTubeController } from '../../../hooks/useYouTubeIntelligence'
 
 type PlatformMarkProps = { size?: number }
 function YouTubeMark({ size = 16 }: PlatformMarkProps) {
@@ -37,9 +38,21 @@ function FacebookMark({ size = 16 }: PlatformMarkProps) {
   )
 }
 
-export function PlatformSelection({ navigate }: ScreenNavigation) {
+export function PlatformSelection({ navigate, controller: c }: ScreenNavigation & { controller?: YouTubeController }) {
   const reduced = useReducedMotion()
   const visual = useRef<HTMLDivElement>(null)
+
+  const isInitializing = Boolean(c?.isInitializing)
+  const isConnected = Boolean(c?.channel || (c?.channels && c.channels.length > 0))
+
+  let nextStep: DemoScreen = 'channel'
+  if (c?.profile && !c.profile.business_name) {
+    nextStep = 'persona'
+  } else if (c?.selectedVideoIds && c.selectedVideoIds.length === 0) {
+    nextStep = 'content'
+  } else {
+    nextStep = 'command-center'
+  }
 
   function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
     if (event.pointerType !== 'mouse' || !visual.current || reduced) return
@@ -100,9 +113,28 @@ export function PlatformSelection({ navigate }: ScreenNavigation) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: reduced ? 0 : 0.18, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
-          <ConnectButton />
-          <button className="td-button td-button-secondary yi-action-explore" onClick={() => navigate('dashboard')}>
-            Explore Workspace <ArrowRight size={15} className="yi-btn-arrow" />
+          {isInitializing ? (
+            <button type="button" className="button td-button td-button-secondary" disabled>
+              <LoaderCircle size={15} className="td-spin" /> Verifying Connection...
+            </button>
+          ) : isConnected ? (
+            <button
+              type="button"
+              className="button td-button td-button-primary"
+              onClick={() => navigate(nextStep)}
+            >
+              Continue Setup <ArrowRight size={15} />
+            </button>
+          ) : (
+            <ConnectButton />
+          )}
+
+          <button
+            type="button"
+            className="td-button td-button-secondary yi-action-explore"
+            onClick={() => navigate(isConnected ? 'dashboard' : 'channel')}
+          >
+            {isConnected ? 'Explore Workspace' : 'Select Channel'} <ArrowRight size={15} className="yi-btn-arrow" />
           </button>
         </motion.div>
 
@@ -190,9 +222,9 @@ export function PlatformSelection({ navigate }: ScreenNavigation) {
             <YouTubeMark size={16} />
           </span>
           <div className="yi-net-info">
-            <strong>YouTube</strong>
-            <span className="yi-net-status yi-status-live">
-              <i /> Active Sync
+            <strong>{c?.channel?.title || 'YouTube'}</strong>
+            <span className={'yi-net-status ' + (isConnected ? 'yi-status-live' : '')}>
+              <i /> {isConnected ? 'Active Sync' : 'Not Connected'}
             </span>
           </div>
         </div>

@@ -14,6 +14,7 @@ import { Footer } from './components/Footer'
 import { TrustSection } from './sections/TrustSection'
 import { LegalPage } from './pages/LegalPage'
 import { TestDemoPage } from './pages/TestDemoPage'
+import { YouTubeOAuthReturn } from './components/test-demo/YouTubeOAuthReturn'
 
 export default function App() {
   const path = window.location.pathname.replace(/\/$/, '') || '/'
@@ -36,6 +37,8 @@ export default function App() {
     window.addEventListener('hashchange', handleHash)
     return () => window.removeEventListener('hashchange', handleHash)
   }, [])
+
+  if (path.startsWith('/dashboard')) return <YouTubeOAuthReturn />
 
   if (path === '/test-demo') return <TestDemoPage />
 
